@@ -1,18 +1,23 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 //const cors = require('cors');
 //const morgan = require('morgan');
 
-module.exports = app;
+const app = express();
 
+const database = require('./server/envelopes.js');
+
+module.exports = app;
 
 const PORT = process.env.PORT || 4001;
 
-/*// Add middleware for handling CORS requests from index.html
+// setup static 
+app.use(express.static('./public'));
+
+/*// middleware for handling CORS requests from index.html
 app.use(cors());*/
 
-// Add middware for parsing request bodies here:
+// middware for parsing request bodies here:
 app.use(bodyParser.json());
 
 /*app.use((req, res, next) => {
@@ -23,16 +28,16 @@ app.use(bodyParser.json());
 const envelopesRouter = require('./server/envelopesRouter');
 
 envelopesRouter.post('/', (req, res, next) => {
-  let newEnvelope = {};
-  let id = 0;
-  newEnvelope.id = id+1;
+  newEnvelope = {};
+  newEnvelope.id = database.length + 1;
   newEnvelope.name = req.params.name;
   newEnvelope.amount = req.params.amount;
-  res.send(newEnvelope);
+  database.push(newEnvelope)
+  res.send(database);
 });
 
 envelopesRouter.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.json(database)
 });
   
 app.use('/envelopes', envelopesRouter);
