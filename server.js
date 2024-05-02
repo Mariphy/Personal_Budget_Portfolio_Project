@@ -2,9 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 //const cors = require('cors');
 //const morgan = require('morgan');
-
 const app = express();
-
 const database = require('./server/envelopes.js');
 
 module.exports = app;
@@ -12,7 +10,7 @@ module.exports = app;
 const PORT = process.env.PORT || 4001;
 
 // setup static 
-app.use(express.static('./public'));
+//app.use(express.static('./public'));
 
 /*// middleware for handling CORS requests from index.html
 app.use(cors());*/
@@ -24,6 +22,10 @@ app.use(bodyParser.json());
   morgan('short');
   next();
 });*/
+
+app.get('/', (req, res, next) => {
+  res.send('<h1>Personal Budget Manager</h1><a href="/envelopes">Envelopes</a>')
+})
 
 const envelopesRouter = require('./server/envelopesRouter');
 
@@ -38,6 +40,14 @@ envelopesRouter.post('/', (req, res, next) => {
 
 envelopesRouter.get('/', (req, res) => {
     res.json(database)
+});
+
+envelopesRouter.get('/:envelopeId', (req, res, next) => {
+  console.log(req.params)
+  const {envelopeId} = req.params;
+  const singleEnvelope = database.find(envelope => database.id === Number(envelopeId));
+  console.log(singleEnvelope)
+  res.json(database);
 });
   
 app.use('/envelopes', envelopesRouter);
