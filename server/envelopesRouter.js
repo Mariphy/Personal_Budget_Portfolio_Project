@@ -27,4 +27,16 @@ envelopesRouter.post('/', (req, res, next) => {
     res.json(singleEnvelope);
   });
 
+  envelopesRouter.delete('/:envelopeId', (req, res) => {
+    const {envelopeId} = req.params;
+    const envelopeIndex = database.findIndex((envelope) => envelope.id === Number(envelopeId));
+    if(!envelopeIndex) {
+      return res.status(404).send('Envelope does not exist')
+    }
+    database.splice(envelopeIndex, 1)
+    res.status(200).send(database);
+  });
+
+  //envelopesRouter.put();
+
 module.exports = envelopesRouter;
