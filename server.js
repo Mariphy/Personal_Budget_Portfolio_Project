@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 });*/
 
 app.get('/', (req, res, next) => {
-  res.send('<h1>Personal Budget Manager</h1><a href="/envelopes">Envelopes</a>')
+  res.send('<h1>Personal Budget Manager</h1><a href="/api/envelopes">Envelopes</a>')
 })
 
 const envelopesRouter = require('./server/envelopesRouter');
@@ -43,14 +43,12 @@ envelopesRouter.get('/', (req, res) => {
 });
 
 envelopesRouter.get('/:envelopeId', (req, res, next) => {
-  console.log(req.params)
   const {envelopeId} = req.params;
-  const singleEnvelope = database.find(envelope => database.id === Number(envelopeId));
-  console.log(singleEnvelope)
-  res.json(database);
+  const singleEnvelope = database.find((envelope) => envelope.id === Number(envelopeId));
+  res.json(singleEnvelope);
 });
   
-app.use('/envelopes', envelopesRouter);
+app.use('/api/envelopes', envelopesRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
