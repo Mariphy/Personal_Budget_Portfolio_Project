@@ -7,9 +7,11 @@ envelopesRouter.post('/', (req, res, next) => {
     newEnvelope.id = database.length + 1;
     newEnvelope.name = req.body.name;
     newEnvelope.amount = req.body.amount;
+    if(!newEnvelope.name || !newEnvelope.amount) {
+        res.status(400).send('Please, enter a name for you envelope and amount of money you want to allocate to it');
+    }; 
     database.push(newEnvelope)
-    console.log(req.body);
-    res.status(201).send(database);
+    res.status(201).send(newEnvelope);
   });
   
   envelopesRouter.get('/', (req, res) => {
