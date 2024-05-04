@@ -37,6 +37,21 @@ envelopesRouter.post('/', (req, res, next) => {
     res.status(200).send(database);
   });
 
-  //envelopesRouter.put();
+  envelopesRouter.put('/:envelopeId', (req, res) => {
+    const {envelopeId} = req.params;
+    const {name, amount} = req.body;
+    const envelopeToUpdate = database.find((envelope) => envelope.id === Number(envelopeId));
+    if(!envelopeToUpdate) {
+      return res.status(404).send('Envelope does not exist')
+    }
+    const updatedEnvelope = database.map((envelope) => {
+      if (envelope.id === Number(envelopeId)) {
+        envelope.name = name;
+        envelope.amount = amount;
+      }
+      return envelopeToUpdate;
+    });
+    res.status(200).json({status: "updated", data: database});
+  });
 
 module.exports = envelopesRouter;
