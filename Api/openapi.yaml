@@ -1,0 +1,243 @@
+openapi: 3.0.1
+info:
+  title: Personal Budget API
+  version: 1.0.0
+  description: An API for the Personal Budget App
+paths:
+  /api/envelopes:
+    summary: Data for all of the personal budget categories/envelopes
+    description: This path is used to get or create data for personal budget categories
+    post:
+      summary: Create new envelope
+      description: Add a new envelope/category to the database
+      operationId: create_envelope
+      requestBody:
+        description: A new envelope object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Envelope'
+      responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                new envelope:
+                  value: |2-
+                     {"id": 1,
+                         "name": "groceries",
+                         "amount": 500}
+          description: Envelope created
+      tags:
+        - Envelopes
+    get:
+      summary: Get all envelopes
+      description: Retrieve the envelope information from the database
+      operationId: get_envelopes
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    {"id": 1,
+                         "name": "groceries",
+                         "amount": 500},
+                        {"id": 2,
+                        "name": "rent",
+                        "amount": 1000}, 
+                        {"id": 3,
+                        "name": "utility bills",
+                        "amount": 100}
+          description: Success
+      tags:
+        - Envelopes
+  /api/envelopes/{envelopeId}:
+    summary: Data for a single category/envelope
+    description: Manipulate category by id
+    get:
+      summary: Get a single envelope
+      description: >-
+        Retrieve the information about a single category from the database by
+        envelope id
+      operationId: get_envelope
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    {"id": 1,
+                         "name": "groceries",
+                         "amount": 500}
+          description: Success
+      tags:
+        - Envelopes
+    delete:
+      summary: Delete an envelope
+      description: Deletes an envelope with a matching id from the database
+      operationId: delete_envelope
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    {"id": 2,
+                        "name": "rent",
+                        "amount": 1000}, 
+                        {"id": 3,
+                        "name": "utility bills",
+                        "amount": 100}
+          description: Success
+      tags:
+        - Envelopes
+    put:
+      summary: Update envelope
+      description: Update envelope by id
+      operationId: update_envelope
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: An updated envelope object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Envelope'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Updated:
+                  value: |-
+                    {"id": 1,
+                         "name": "groceries",
+                         "amount": 500}
+        default:
+          description: Default error sample response
+      tags:
+        - Envelopes
+  /api/budget:
+    summary: Operations with total budget
+    description: This path is used to access total budget
+    get:
+      summary: Get total budget
+      description: Retrieve total budget from database
+      operationId: get_budget
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    {
+                    "amount": "1000"}
+        default:
+          description: Default error sample response
+      tags:
+        - Budget
+    put:
+      summary: Update budget
+      description: Update total budget amount in the database
+      operationId: update_budget
+      requestBody:
+        description: A new budget object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Budget
+    post:
+      summary: Create budget
+      description: Add budget amount to the database
+      operationId: create_budget
+      requestBody:
+        description: A new budget object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Budget
+  /api/transaction:
+    summary: Add transaction
+    description: Path used to add new transactions
+    post:
+      summary: Create new transaction
+      description: Add a new transaction to the database
+      operationId: create_transaction
+      requestBody:
+        description: A new transaction object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Transactions
+components:
+  schemas:
+    Envelope:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        amount:
+          type: string
+      xml:
+        name: Envelope
+    Budget:
+      type: object
+      properties:
+        amount:
+          type: string
+      xml:
+        name: Budget
+    Transaction:
+      type: object
+      properties:
+        date:
+          type: string
+        amount:
+          type: string
+        recipient:
+          type: string
+        envelopeId:
+          type: string
+      xml:
+        name: Transaction
