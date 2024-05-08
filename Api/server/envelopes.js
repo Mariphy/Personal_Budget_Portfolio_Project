@@ -13,13 +13,17 @@ const other = {};*/
 const database = [
     {"id": 1,
      "name": "groceries",
-     "amount": 500},
+     "amount": "500"},
     {"id": 2,
     "name": "rent",
-    "amount": 1000}, 
+    "amount": "1000"}, 
     {"id": 3,
     "name": "utility bills",
-    "amount": 100}
+    "amount": "100"}
 ]
+
+//const bugget
+
+//const transactions
 
 module.exports = database;

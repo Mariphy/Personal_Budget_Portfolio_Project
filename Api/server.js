@@ -11,7 +11,7 @@ module.exports = app;
 const PORT = process.env.PORT || 4001;
 
 // setup static 
-app.use(express.static('./public'));
+//app.use(express.static('./public'));
 
 // middware 
 app.use(bodyParser.json());
