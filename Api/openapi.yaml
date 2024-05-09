@@ -136,8 +136,7 @@ paths:
                     {"id": 1,
                          "name": "groceries",
                          "amount": 500}
-        default:
-          description: Default error sample response
+          description: Updated
       tags:
         - Envelopes
   /api/budget:
@@ -156,8 +155,7 @@ paths:
                   value: |-
                     {
                     "amount": "1000"}
-        default:
-          description: Default error sample response
+          description: Success
       tags:
         - Budget
     put:

@@ -5,6 +5,12 @@ const morgan = require('morgan');
 const app = express();
 let database = require('./server/envelopes.js');
 const envelopesRouter = require('./server/envelopesRouter');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+const swaggerDocument = yaml.load(fs.readFileSync('./openapi.yaml', 'utf8')); 
 
 module.exports = app;
 
@@ -18,7 +24,8 @@ app.use(bodyParser.json());
 app.use(morgan('short'));
 app.use(cors());
 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //envelopes router
 app.use('/api/envelopes', envelopesRouter);
