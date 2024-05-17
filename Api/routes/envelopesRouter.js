@@ -1,7 +1,14 @@
+//import * as db from '../DB/index';
 const express = require('express');
 const envelopesRouter = express.Router();
-let database = require('./envelopes.js');
+const database = require('../DB/queries');
 
+/*
+app.get('/:id', async (req, res, next) => {
+  const result = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id])
+  res.send(result.rows[0])
+})
+*/
 envelopesRouter.post('/', (req, res, next) => {
     let newEnvelope = {};
     newEnvelope.id = database.length + 1;
@@ -14,9 +21,7 @@ envelopesRouter.post('/', (req, res, next) => {
     res.status(201).send(newEnvelope);
   });
   
-  envelopesRouter.get('/', (req, res) => {
-      res.status(200).send(database);
-  });
+  envelopesRouter.get('/', database.getEnvelopes);
   
   envelopesRouter.get('/:envelopeId', (req, res, next) => {
     const {envelopeId} = req.params;
