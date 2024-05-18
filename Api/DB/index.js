@@ -7,11 +7,11 @@ const pool = new Pool({
     user: process.env.PG_USER,
     password: process.env.PG_PASSWORD,
     database: process.env.PG_DATABASE
-  });
- 
+});
+
 const query = (text, params, callback) => {
     return pool.query(text, params, callback)
-}
+};
 
 /*const getClient = () => {
     return pool.connect()
