@@ -9,6 +9,24 @@ const getEnvelopes = (req, res) => {
     })
 };
 
+const getBudget = (req, res) => {
+  db.query('SELECT * FROM budget ORDER BY id ASC', (error, results) => {
+      if (error) {
+          throw error
+      }
+      res.status(200).json(results.rows)
+  })
+};
+
+const getTransactions = (req, res) => {
+  db.query('SELECT * FROM transactions ORDER BY id ASC', (error, results) => {
+      if (error) {
+          throw error
+      }
+      res.status(200).json(results.rows)
+  })
+};
+
 const getEnvelopeById = (req, res) => {
   const id = req.params.envelopeId;
   console.log(id);
@@ -67,7 +85,22 @@ const updateEnvelope = (req, res) => {
       if (error) {
         throw error
       }
-      res.status(200).send(`User modified with ID: ${id}`)
+      res.status(200).send(`Envelope modified with ID: ${id}`)
+    }
+  )
+};
+
+const updateBudget = (req, res) => {
+  const id = req.params.budgetId;
+  const {amount} = req.body;
+  db.query (
+    'UPDATE budget SET amount = $1 WHERE id = $2',
+    [amount, id],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).send(`Budget modified with ID: ${id}`)
     }
   )
 };
@@ -79,7 +112,18 @@ const deleteEnvelope = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(200).send(`User deleted with ID: ${id}`)
+    res.status(200).send(`Envelope deleted with ID: ${id}`)
+  })
+};
+
+const deleteBudget = (req, res) => {
+  const id = req.params.budgetId;
+
+  db.query ('DELETE FROM budget WHERE id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).send(`Budget deleted with ID: ${id}`)
   })
 };
 
@@ -89,5 +133,9 @@ module.exports = {getEnvelopes,
   updateEnvelope, 
   deleteEnvelope,
   createBudget,
-  getBudgetById
+  getBudget,
+  getBudgetById,
+  deleteBudget,
+  updateBudget,
+  getTransactions
 };
