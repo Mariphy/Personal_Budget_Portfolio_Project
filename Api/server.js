@@ -8,6 +8,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const yaml = require('js-yaml');
 const fs = require('fs');
 const budgetRouter = require('./routes/budgetRouter');
+const transactionsRouter = require('./routes/transactionsRouter');
 require('dotenv').config();
 
 const swaggerDocument = yaml.load(fs.readFileSync('./openapi.yaml', 'utf8')); 
@@ -32,9 +33,10 @@ server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 server.use('/api/envelopes', envelopesRouter);
 
 //budget router
-server.use('/api/budget', budgetRouter)
+server.use('/api/budget', budgetRouter);
 
 //transactions router
+server.use('/api/transactions', transactionsRouter);
 
 //home page
 server.get('/', (req, res, next) => {

@@ -29,7 +29,6 @@ const getTransactions = (req, res) => {
 
 const getEnvelopeById = (req, res) => {
   const id = req.params.envelopeId;
-  console.log(id);
 
   db.query('SELECT * FROM envelopes WHERE id = $1', [id], (error, results) => {
     if (error) {
@@ -41,7 +40,6 @@ const getEnvelopeById = (req, res) => {
 
 const getBudgetById = (req, res) => {
   const id = req.params.budgetId;
-  console.log(id);
 
   db.query('SELECT * FROM budget WHERE id = $1', [id], (error, results) => {
     if (error) {
@@ -49,12 +47,21 @@ const getBudgetById = (req, res) => {
     }
     res.status(200).json(results.rows)
   })
-}
+};
+
+const getTransactionById = (req, res) => {
+  const id = req.params.transactionId;
+
+  db.query('SELECT * FROM transactions WHERE id = $1', [id], (error, results) => {
+    if (error) {
+        throw error
+    }
+    res.status(200).json(results.rows)
+  })
+};
 
 const createEnvelope = (req, res) => {
   const {name, amount, budget_id} = req.body;
-  console.log(req.body);
-  console.log(name, amount, budget_id);
 
   db.query('INSERT INTO envelopes (name, amount, budget_id) VALUES ($1, $2, $3) RETURNING *', [name, amount, budget_id], (error, results) => {
     if (error) {
@@ -74,6 +81,8 @@ const createBudget = (req, res) => {
   })
 
 };
+
+
 
 const updateEnvelope = (req, res) => {
   const id = req.params.envelopeId;
@@ -105,6 +114,8 @@ const updateBudget = (req, res) => {
   )
 };
 
+
+
 const deleteEnvelope = (req, res) => {
   const id = req.params.envelopeId;
 
@@ -127,6 +138,17 @@ const deleteBudget = (req, res) => {
   })
 };
 
+const deleteTransaction = (req, res) => {
+  const id = req.params.transactionId;
+
+  db.query ('DELETE FROM transactions WHERE id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).send(`transaction deleted with ID: ${id}`)
+  })
+};
+
 module.exports = {getEnvelopes, 
   getEnvelopeById, 
   createEnvelope, 
@@ -137,5 +159,7 @@ module.exports = {getEnvelopes,
   getBudgetById,
   deleteBudget,
   updateBudget,
-  getTransactions
+  getTransactions,
+  getTransactionById,
+  deleteTransaction
 };
