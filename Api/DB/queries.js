@@ -79,10 +79,28 @@ const createBudget = (req, res) => {
     }
     res.status(201).send(`Amount added`)
   })
-
 };
 
-
+const createTransaction = (req, res) => {
+  const {date, amount, recipient, envelope_id} = req.body;
+  db.query('UPDATE envelopes SET amount = amount - $1 WHERE id = $2', [amount, envelope_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+  });
+  db.query('UPDATE budget SET amount = amount - $1 WHERE id = 1', [amount], (error, results) => {
+    if (error) {
+      throw error
+    }
+  });
+  db.query('INSERT INTO transactions (date, amount, recipient, envelope_id) VALUES ($1, $2, $3, $4) RETURNING *', [date, amount, recipient, envelope_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(201).send(`Transaction added`)
+  });
+  
+};
 
 const updateEnvelope = (req, res) => {
   const id = req.params.envelopeId;
@@ -161,5 +179,7 @@ module.exports = {getEnvelopes,
   updateBudget,
   getTransactions,
   getTransactionById,
-  deleteTransaction
+  deleteTransaction,
+  createTransaction,
+  //updateTransaction
 };
