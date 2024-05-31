@@ -49,6 +49,18 @@ const getBudgetById = (req, res) => {
   })
 };
 
+const getTransactionByEnvelope = (req, res) => {
+  const envelopeId = req.params.envelopeId;
+  console.log(envelopeId)
+
+  db.query('SELECT * FROM transactions WHERE envelope_id = $1', [envelopeId], (error, results) => {
+    if (error) {
+        throw error
+    }
+    res.status(200).json(results.rows)
+  })
+};
+
 const getTransactionById = (req, res) => {
   const id = req.params.transactionId;
 
@@ -132,7 +144,53 @@ const updateBudget = (req, res) => {
   )
 };
 
+const updateTransaction = async (req, res) => {
+  const id = req.params.transactionId;
+  console.log(id)
+  let previousAmount;
+  try {
+    const results = await db.query('SELECT amount FROM transactions WHERE id = $1', [id]);
+    previousAmount = results.rows[0].amount;
+  } catch (error) {
+    throw error
+  }
 
+  console.log(previousAmount)
+  const {date, amount, recipient, envelope_id} = req.body;
+  if (previousAmount === amount) {
+    db.query (
+      'UPDATE transactions SET date = $1, amount = $2, recipient = $3, envelope_id = $4 WHERE id = $5',
+      [date, amount, recipient, envelope_id, id],
+      (error, results) => {
+        if (error) {
+          throw error
+        }
+        res.status(200).send(`Transaction modified with ID: ${id}`)
+      }
+    )
+  } else {
+    db.query('UPDATE envelopes SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount, amount, envelope_id], (error, results) => {
+      if (error) {
+        throw error
+      }
+    });
+    db.query('UPDATE budget SET amount = amount + $1 - $2 WHERE id = 1', [previousAmount, amount], (error, results) => {
+      if (error) {
+        throw error
+      }
+    });
+    db.query (
+      'UPDATE transactions SET date = $1, amount = $2, recipient = $3, envelope_id = $4 WHERE id = $5',
+      [date, amount, recipient, envelope_id, id],
+      (error, results) => {
+        if (error) {
+          throw error
+        }
+        res.status(200).send(`Transaction modified with ID: ${id}`)
+      }
+    )
+  }
+};
 
 const deleteEnvelope = (req, res) => {
   const id = req.params.envelopeId;
@@ -156,15 +214,31 @@ const deleteBudget = (req, res) => {
   })
 };
 
-const deleteTransaction = (req, res) => {
+const deleteTransaction = async (req, res) => {
   const id = req.params.transactionId;
-
-  db.query ('DELETE FROM transactions WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+  const envelope_id = req.params.envelopeId;
+  let previousAmount;
+  try {
+    const results = await db.query('SELECT amount FROM transactions WHERE id = $1', [id]);
+    if (results.rows[0]) {
+      previousAmount = results.rows[0].amount;
+    } else {
+      return res.status(404).send(`No transaction found with ID: ${id}`);
     }
-    res.status(200).send(`transaction deleted with ID: ${id}`)
-  })
+  } catch (error) {
+    throw error
+  }
+
+  console.log(previousAmount);
+
+  try {
+    await db.query('UPDATE envelopes SET amount = amount + $1 WHERE id = $2', [previousAmount, envelope_id]);
+    await db.query('UPDATE budget SET amount = amount + $1 WHERE id = 1', [previousAmount]);
+    await db.query ('DELETE FROM transactions WHERE id = $1', [id]);
+    res.status(200).send(`transaction deleted with ID: ${id}`);
+  } catch (error) {
+    throw error
+  }
 };
 
 module.exports = {getEnvelopes, 
@@ -181,5 +255,6 @@ module.exports = {getEnvelopes,
   getTransactionById,
   deleteTransaction,
   createTransaction,
-  //updateTransaction
+  getTransactionByEnvelope,
+  updateTransaction
 };
