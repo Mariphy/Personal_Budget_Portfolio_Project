@@ -79,7 +79,7 @@ const createEnvelope = (req, res) => {
     if (error) {
         throw error
     }
-    res.status(201).send(`Envelope added with ID: ${results.rows[0].id}`)
+    res.status(201).json({message:`Envelope added with ID: ${results.rows[0].id}`, data: results.rows})
   })
 };
 
@@ -89,7 +89,7 @@ const createBudget = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(201).send(`Amount added`)
+    res.status(201).json({message: "Amount added"})
   })
 };
 
@@ -116,10 +116,10 @@ const createTransaction = (req, res) => {
 
 const updateEnvelope = (req, res) => {
   const id = req.params.envelopeId;
-  const {name, amount} = req.body;
+  const {name, amount, budget_id} = req.body;
   db.query (
-    'UPDATE envelopes SET name = $1, amount = $2 WHERE id = $3',
-    [name, amount, id],
+    'UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
+    [name, amount, budget_id, id],
     (error, results) => {
       if (error) {
         throw error
