@@ -24,9 +24,13 @@ paths:
               examples:
                 new envelope:
                   value: |2-
-                     {"id": 1,
-                         "name": "groceries",
-                         "amount": 500}
+                     {"message": "Envelope added with ID: 1",
+                      "data":[{
+                      "id": 1,
+                      "name": "Travel",
+                      "amount": "$200.00",
+                      "budget_id": 1}]
+                     }  
           description: Envelope created
       tags:
         - Envelopes
@@ -42,14 +46,17 @@ paths:
                 Success:
                   value: |-
                     {"id": 1,
-                         "name": "groceries",
-                         "amount": 500},
-                        {"id": 2,
-                        "name": "rent",
-                        "amount": 1000}, 
-                        {"id": 3,
-                        "name": "utility bills",
-                        "amount": 100}
+                     "name": "groceries",
+                     "amount": "$200.00",
+                      "budget_id": 1},
+                    {"id": 2,
+                     "name": "rent",
+                     "amount": "$200.00",
+                      "budget_id": 1}, 
+                    {"id": 3,
+                      "name": "utility bills",
+                      "amount": "$200.00",
+                      "budget_id": 1}
           description: Success
       tags:
         - Envelopes
@@ -68,7 +75,7 @@ paths:
           description: The id of the envelope.
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           content:
@@ -77,35 +84,10 @@ paths:
                 Success:
                   value: |-
                     {"id": 1,
-                         "name": "groceries",
-                         "amount": 500}
-          description: Success
-      tags:
-        - Envelopes
-    delete:
-      summary: Delete an envelope
-      description: Deletes an envelope with a matching id from the database
-      operationId: delete_envelope
-      parameters:
-        - name: envelopeId
-          in: path
-          description: The id of the envelope.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                Success:
-                  value: |-
-                    {"id": 2,
-                        "name": "rent",
-                        "amount": 1000}, 
-                        {"id": 3,
-                        "name": "utility bills",
-                        "amount": 100}
+                      "name": "Travel",
+                      "amount": "$200.00",
+                      "budget_id": 1
+                     }
           description: Success
       tags:
         - Envelopes
@@ -119,7 +101,7 @@ paths:
           description: The id of the envelope.
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         description: An updated envelope object
         content:
@@ -132,47 +114,34 @@ paths:
             application/json:
               examples:
                 Updated:
-                  value: |-
-                    {"id": 1,
-                         "name": "groceries",
-                         "amount": 500}
+                  value: '{"message": "Envelope modified with ID: 1"}'
           description: Updated
       tags:
-        - Envelopes
-  /api/budget:
-    summary: Operations with total budget
-    description: This path is used to access total budget
-    get:
-      summary: Get total budget
-      description: Retrieve total budget from database
-      operationId: get_budget
+        - Envelopes    
+    delete:
+      summary: Delete an envelope
+      description: Deletes an envelope with a matching id from the database
+      operationId: delete_envelope
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           content:
             application/json:
               examples:
                 Success:
-                  value: |-
-                    {
-                    "amount": "1000"}
+                  value: '{"message": "Envelope deleted with ID: 1"}'
           description: Success
       tags:
-        - Budget
-    put:
-      summary: Update budget
-      description: Update total budget amount in the database
-      operationId: update_budget
-      requestBody:
-        description: A new budget object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Budget'
-      responses:
-        default:
-          description: Default error sample response
-      tags:
-        - Budget
+        - Envelopes
+  /api/budget:
+    summary: Operations with budgets
+    description: This path is used to access and create budgets
     post:
       summary: Create budget
       description: Add budget amount to the database
@@ -184,17 +153,104 @@ paths:
             schema:
               $ref: '#/components/schemas/Budget'
       responses:
+        '201':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: '{"message": "Amount added"}'
+          description: Success
+      tags:
+        - Budget
+    get:
+      summary: Get the list of budgets
+      description: Retrieve the list of budgets (for different users) from database
+      operationId: get_budget
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    [{ "id": 1,
+                       "amount": "$790.00" },
+                    { "id": 2,
+                      "amount": "$200.00" }]
+          description: Success
+      tags:
+        - Budget
+  /api/budget/{budgetId}:
+    summary: To access total budget
+    description: Refers to a total budget of a single user
+    get:
+      summary: Get a total budget
+      description: Get a total budget for a single user
+      operationId: get_budget_by_id
+      parameters:
+        - name: budgetId
+          in: path
+          description: The id of the budget.
+          required: true
+          schema:
+            type: integer
+      responses:
         default:
           description: Default error sample response
       tags:
         - Budget
-  /api/transaction:
-    summary: Add transaction
-    description: Path used to add new transactions
+    put:
+      summary: Update budget
+      description: Update total budget amount in the database
+      operationId: update_budget
+      parameters:
+        - name: budgetId
+          in: path
+          description: The id of the budget.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: A new budget object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Budget
+    delete:
+      summary: Delete a budget
+      description: Delete a budget by id
+      operationId: delete_budget
+      parameters:
+        - name: budgetId
+          in: path
+          description: The id of the budget.
+          required: true
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Budget
+  /api/envelopes/{envelopeId}/transactions:
+    summary: Operations with transactions
+    description: Path used to access all or add new transactions
     post:
       summary: Create new transaction
       description: Add a new transaction to the database
       operationId: create_transaction
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
       requestBody:
         description: A new transaction object
         content:
@@ -206,22 +262,119 @@ paths:
           description: Default error sample response
       tags:
         - Transactions
+    get:
+      summary: 'Get all transactions '
+      description: Get all transactions for the certain category/envelope
+      operationId: get_transactions_by_envelope
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Transactions
+  /api/envelopes/{envelopeId}/transactions/{transactionId}:
+    summary: Access transaction by id
+    description: Access a single transaction
+    get:
+      summary: Get a single transaction
+      description: Get transaction by id
+      operationId: get_transaction_by_id
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
+        - name: transactionId
+          in: path
+          description: The id of the transaction.
+          required: true
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Transactions
+    put:
+      summary: Update a transaction
+      description: Update a single transaction by id
+      operationId: update_transaction
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
+        - name: transactionId
+          in: path
+          description: The id of the transaction.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: A new transaction object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Transactions
+    delete:
+      summary: Delete a transaction
+      description: Delete a single transaction by id
+      operationId: delete_transaction
+      parameters:
+        - name: envelopeId
+          in: path
+          description: The id of the envelope.
+          required: true
+          schema:
+            type: integer
+        - name: transactionId
+          in: path
+          description: The id of the transaction.
+          required: true
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Transactions
 components:
   schemas:
     Envelope:
       type: object
       properties:
+        id:
+          type: integer
+          description: PostgreSQL type "auto-increment"
         name:
           type: string
-        id:
-          type: string
         amount:
-          type: string
+          type: integer
+          description: PostgreSQL type "money", i.e. "$200.00"
+        budget_id:
+          type: integer
       xml:
         name: Envelope
     Budget:
       type: object
       properties:
+        id:
+          type: integer
         amount:
           type: string
       xml:
@@ -229,13 +382,17 @@ components:
     Transaction:
       type: object
       properties:
+        id:
+          type: integer
         date:
           type: string
+          description: PostgreSQL type "date", i.e. "2024-05-06"
         amount:
-          type: string
+          type: integer
+          description: PostgreSQL type "money", i.e. "$200.00"
         recipient:
           type: string
         envelopeId:
-          type: string
+          type: integer
       xml:
         name: Transaction
