@@ -18,14 +18,14 @@ const getBudget = (req, res) => {
   })
 };
 
-const getTransactions = (req, res) => {
+/*const getTransactions = (req, res) => {
   db.query('SELECT * FROM transactions ORDER BY id ASC', (error, results) => {
       if (error) {
           throw error
       }
       res.status(200).json(results.rows)
   })
-};
+};*/
 
 const getEnvelopeById = (req, res) => {
   const id = req.params.envelopeId;
@@ -34,7 +34,11 @@ const getEnvelopeById = (req, res) => {
     if (error) {
         throw error
     }
-    res.status(200).json(results.rows)
+    if (results.rows.length === 0) {
+      res.status(404).send(`Envelope with ID ${id} does not exist`);
+    } else {
+      res.status(200).json(results.rows)
+    }
   })
 };
 
@@ -45,11 +49,16 @@ const getBudgetById = (req, res) => {
     if (error) {
         throw error
     }
-    res.status(200).json(results.rows)
+    if (results.rows.length === 0) {
+      res.status(404).send(`Budget with ID ${id} does not exist`);
+    } else {
+      res.status(200).json(results.rows)
+    }
   })
 };
 
 const getTransactionByEnvelope = (req, res) => {
+  console.log(req.params)
   const envelopeId = req.params.envelopeId;
   console.log(envelopeId)
 
@@ -68,7 +77,11 @@ const getTransactionById = (req, res) => {
     if (error) {
         throw error
     }
-    res.status(200).json(results.rows)
+    if (results.rows.length === 0) {
+      res.status(404).send(`Envelope with ID ${id} does not exist`);
+    } else {
+      res.status(200).json(results.rows)
+    }
   })
 };
 
@@ -251,7 +264,7 @@ module.exports = {getEnvelopes,
   getBudgetById,
   deleteBudget,
   updateBudget,
-  getTransactions,
+  //getTransactions,
   getTransactionById,
   deleteTransaction,
   createTransaction,
