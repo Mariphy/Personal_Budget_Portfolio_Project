@@ -98,12 +98,15 @@ const createEnvelope = (req, res) => {
 
 const createBudget = (req, res) => {
   const {amount} = req.body;
+  if (amount === null) {
+    res.status(400).json({message: "budget not created"})
+  };  
   db.query('INSERT INTO budget (amount) VALUES ($1) RETURNING *', [amount], (error, results) => {
     if (error) {
       throw error
     }
     res.status(201).json({message: "Amount added"})
-  })
+  });
 };
 
 const createTransaction = (req, res) => {
