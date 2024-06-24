@@ -10,8 +10,15 @@ It divides income into different spending categories and limits spending to the 
 
 ## How to use
 
-## Technologies
+## Tech/Tools Used:
+- Node.js and NPM
+- Express.js
+- PostgreSQL
+- Git & GitHub
+- Postman
+- Angular
 
 ## Collaborators
 
 ## License
+[MIT License](LICENSE.txt)
