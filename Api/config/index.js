@@ -13,8 +13,4 @@ const query = (text, params, callback) => {
     return pool.query(text, params, callback)
 };
 
-/*const getClient = () => {
-    return pool.connect()
-};*/
-
 module.exports = {query};
