@@ -99,10 +99,32 @@ const getTransactionById = async (req, res) => {
 
 const createEnvelope = async (req, res) => {
   const {name, amount, budget_id} = req.body;
-
+  const totalAmountQuery = `WITH total_amount AS (
+      SELECT SUM(amount) AS total
+      FROM envelopes 
+      WHERE budget_id = $1
+    ),
+    current_budget AS (
+      SELECT amount 
+      FROM budget
+      WHERE id = $1
+    )
+    SELECT total_amount.total, current_budget.amount,
+      CASE 
+        WHEN total_amount.total < current_budget.amount THEN 'true'
+        ELSE 'false'
+      END
+    FROM total_amount, current_budget`;
   try {
-    const newEnvelope = await  db.query('INSERT INTO envelopes (name, amount, budget_id) VALUES ($1, $2, $3) RETURNING *', [name, amount, budget_id]);
-    res.status(201).json({message:`Envelope added with ID: ${newEnvelope.rows[0].id}`, data: newEnvelope.rows})
+    const result = await db.query(totalAmountQuery, [budget_id]);
+
+    if (result.rows[0].case === 'false') {
+      res.status(200).send({ message: 'You went over budget, consider another amount' });
+    } else {
+      const newEnvelope = await  db.query('INSERT INTO envelopes (name, amount, budget_id) VALUES ($1, $2, $3) RETURNING *', [name, amount, budget_id]);
+      res.status(201).json({message:`Envelope added with ID: ${newEnvelope.rows[0].id}`, data: newEnvelope.rows})
+    }
+    
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while creating envelope' });
   }
