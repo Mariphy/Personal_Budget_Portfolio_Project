@@ -149,8 +149,8 @@ const createTransaction = async (req, res) => {
   const {date, amount, recipient} = req.body;
   const envelope_id = req.params.envelopeId;
 
-  if (!envelope_id) {
-    return res.status(400).json({ error: 'Envelope ID is required' });
+  if (!envelope_id || !date || !amount || !recipient) {
+    return res.status(400).json({ error: 'More data required' });
   };
 
   try{
