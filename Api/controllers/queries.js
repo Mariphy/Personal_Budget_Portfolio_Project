@@ -132,13 +132,14 @@ const createEnvelope = async (req, res) => {
 
 const createBudget = async (req, res) => {
   const {amount} = req.body;
-  if (amount === null) {
-    res.status(400).json({message: "budget not created"})
-  };  
-
+  
   try {
-    const newBudget = await   db.query('INSERT INTO budget (amount) VALUES ($1) RETURNING *', [amount]);
-    res.status(201).json({message:`Budget added with ID: ${newBudget.rows[0].id}`, data: newBudget.rows})
+    if (!amount) {
+      res.status(400).json({message: "budget not created"})
+    } else {
+      const newBudget = await  db.query('INSERT INTO budget (amount) VALUES ($1) RETURNING *', [amount]);
+      res.status(201).json({message:`Budget added with ID: ${newBudget.rows[0].id}`, data: newBudget.rows});
+    }  
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while creating budget' });
   }
