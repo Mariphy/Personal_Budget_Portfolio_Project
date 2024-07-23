@@ -1,6 +1,6 @@
 const express = require('express');
 const budgetRouter = express.Router();
-const database = require('../DB/queries');
+const database = require('../controllers/queries');
 
 
 budgetRouter.post('/', database.createBudget);

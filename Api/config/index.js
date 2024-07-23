@@ -9,8 +9,15 @@ const pool = new Pool({
     database: process.env.PG_DATABASE
 });
 
-const query = (text, params, callback) => {
-    return pool.query(text, params, callback)
-};
+const query = (text, params) => {
+    return new Promise((resolve, reject) => {
+      pool.query(text, params, (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(results);
+      });
+    });
+  };
 
 module.exports = {query};

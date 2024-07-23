@@ -1,6 +1,6 @@
 const express = require('express');
 const envelopesRouter = express.Router();
-const database = require('../DB/queries');
+const database = require('../controllers/queries');
 
 envelopesRouter.post('/', database.createEnvelope);  
 envelopesRouter.get('/', database.getEnvelopes); 
