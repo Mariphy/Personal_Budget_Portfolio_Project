@@ -172,16 +172,40 @@ const createTransaction = async (req, res) => {
 const updateEnvelope = async (req, res) => {
   const id = req.params.envelopeId;
   const {name, amount, budget_id} = req.body;
+  const totalAmountQuery = `WITH total_amount AS (
+    SELECT SUM(amount) AS total
+    FROM envelopes 
+    WHERE budget_id = $1
+  ),
+  current_budget AS (
+    SELECT amount 
+    FROM budget
+    WHERE id = $1
+  )
+  SELECT total_amount.total, current_budget.amount,
+    CASE 
+      WHEN total_amount.total < current_budget.amount THEN 'true'
+      ELSE 'false'
+    END
+  FROM total_amount, current_budget`;
+
+  if (!id || !name || !amount || !budget_id) {
+    return res.status(400).json({ error: 'More data required' });
+  };
 
   try {
-    const updatedEnvelope = await db.query (
-      'UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
+    const result = await db.query(totalAmountQuery, [budget_id]);
+
+    if (result.rows[0].case === 'false') {
+      res.status(200).send({ message: 'You went over budget, consider another amount' });
+    } else {
+      const updatedEnvelope = await db.query ('UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
       [name, amount, budget_id, id]);
-    res.status(200).send({message: `Envelope modified with ID: ${id}`, data: updatedEnvelope.rows[0]})  
+      res.status(200).send({message: `Envelope modified with ID: ${id}`, data: updatedEnvelope.rows[0]})  
+    }  
   } catch(error) {
     return res.status(500).send({error: 'An error occurred while updating envelope'});
   }
- 
 };
 
 const updateBudget = async (req, res) => {
