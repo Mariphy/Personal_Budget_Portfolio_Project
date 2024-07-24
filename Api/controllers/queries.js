@@ -239,30 +239,47 @@ const updateTransaction = async (req, res) => {
   const {date, amount, recipient, envelope_id} = req.body;
   const budget_id = 1;
 
+  if (!id || !amount || !date || !recipient || !envelope_id) {
+    return res.status(400).json({ error: 'More data required' });
+  };
+
   try{
-    await db.query('BEGIN');
-    const updatedTransaction = await db.query( 'UPDATE transactions SET date = $1, amount = $2, recipient = $3, envelope_id = $4 WHERE id = $5',
-      [date, amount, recipient, envelope_id, id]);
     const previousAmount = await db.query("SELECT amount FROM transactions WHERE id = $1", [id]);  
-    await db.query  ('UPDATE envelopes SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount, amount, envelope_id]);
-    await db.query('UPDATE budget SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount, amount, budget_id]);
+    await db.query('BEGIN');
+    const updatedTransaction = await db.query( 'UPDATE transactions SET date = $1, amount = $2, recipient = $3, envelope_id = $4 WHERE id = $5', [date, amount, recipient, envelope_id, id]);
+    await db.query  ('UPDATE envelopes SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount.rows[0].amount, amount, envelope_id]);
+    await db.query('UPDATE budget SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount.rows[0].amount, amount, budget_id]);
     await db.query('COMMIT');
     res.status(200).send({message: `Transaction modified with ID: ${id}`, data: updatedTransaction.rows[0]});
   } catch(error) {
     await db.query('ROLLBACK');
-    res.status(500).send({error: 'An error occurred while adding transaction' });
+    if (error.code === '23514') { // PostgreSQL error code for check violation
+      res.status(400).send({ message: 'You went over budget' });
+    } else {
+      res.status(500).send({error: 'An error occurred while adding transaction' });
+    }    
   }
-
 };
 
 const deleteEnvelope = async (req, res) => {
   const id = req.params.envelopeId;
   
   try{
-    const deletedEnvelope = await db.query ('DELETE FROM envelopes WHERE id = $1', [id]);
-    res.status(204).send({message: `Envelope deleted with ID: ${id}`});
+    const exists = await db.query('SELECT EXISTS(SELECT 1 FROM envelopes WHERE id = $1)', [id]);
+
+    if (exists.rows[0].exists === false) {
+      return res.status(404).send({message: `Envelope with ID ${id} does not exist`});
+    } else {
+      await db.query ('DELETE FROM envelopes WHERE id = $1', [id]);
+      res.status(200).send({message: `Envelope deleted with ID: ${id}`});
+    }
+    
   } catch(error) {
-    return res.status(500).send({error: 'An error occurred while deleting envelope'});
+    if (error.code === '23503') { // PostgreSQL error code for foreign key constraint violation
+      res.status(400).send({ message: 'You have transactions associated with this envelope' });
+    } else {
+      res.status(500).send({error: 'An error occurred while adding transaction' });
+    }    
   }
 };
 
@@ -270,31 +287,45 @@ const deleteBudget = async (req, res) => {
   const id = req.params.budgetId;
 
   try{
-    const deletedEnvelope = await db.query ('DELETE FROM budget WHERE id = $1', [id]);
-    res.status(200).send(`Budget deleted with ID: ${id}`);
+    const exists = await db.query('SELECT EXISTS(SELECT 1 FROM budget WHERE id = $1)', [id]);
+
+    if (exists.rows[0].exists === false) {
+      return res.status(404).send({message: `Budget with ID ${id} does not exist`});
+    } else {
+      await db.query ('DELETE FROM budget WHERE id = $1', [id]);
+      res.status(200).send({message: `Budget deleted with ID: ${id}`});
+    }
+    
   } catch(error) {
-    return res.status(500).send({error: 'An error occurred while deleting budget'});
-  }  
+    if (error.code === '23503') { // PostgreSQL error code for foreign key constraint violation
+      res.status(400).send({ message: 'You have envelopes associated with this budget' });
+    } else {
+      res.status(500).send({error: 'An error occurred while adding transaction' });
+    }    
+  }
  
 }
 const deleteTransaction = async (req, res) => {
   const id = req.params.transactionId;
   const envelope_id = req.params.envelopeId;
+  const budget_id = 1;
 
-  try {
-    await db.query('BEGIN');
-    const previousAmount = await db.query('SELECT amount FROM transactions WHERE id = $1', [id]);
+  try{
+    const previousAmount = await db.query("SELECT amount FROM transactions WHERE id = $1", [id]);  
     if (!previousAmount.rows[0]) {
-      return res.status(404).send(`No transaction found with ID: ${id}`);
+      return res.status(404).send({message:`No transaction found with ID: ${id}`});
     }
-    await db.query('UPDATE envelopes SET amount = amount + $1 WHERE id = $2', [previousAmount, envelope_id]);
-    await db.query('UPDATE budget SET amount = amount + $1 WHERE id = 1', [previousAmount]);
+    await db.query('BEGIN');
     await db.query ('DELETE FROM transactions WHERE id = $1', [id]);
+    await db.query  ('UPDATE envelopes SET amount = amount + $1 WHERE id = $2', [previousAmount.rows[0].amount, envelope_id]);
+    await db.query('UPDATE budget SET amount = amount + $1 WHERE id = $2', [previousAmount.rows[0].amount, budget_id]);
     await db.query('COMMIT');
-    res.status(200).send(`Transaction deleted with ID: ${id}`);
+    res.status(200).send({message: `Transaction is deleted with ID: ${id}`});
+
   } catch(error) {
     await db.query('ROLLBACK');
-    res.status(500).send({error: 'An error occurred while adding transaction' });
+    res.status(500).send({error: 'An error occurred while deleting transaction' });
+    console.log(error)
   }
 };
 
