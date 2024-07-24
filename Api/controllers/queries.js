@@ -99,6 +99,10 @@ const getTransactionById = async (req, res) => {
 
 const createEnvelope = async (req, res) => {
   const {name, amount, budget_id} = req.body;
+
+  if (!name || !amount || !budget_id) {
+    return res.status(400).send({message: 'Add name and amount of the envelope'});
+  }
   const totalAmountQuery = `WITH total_amount AS (
       SELECT SUM(amount) AS total
       FROM envelopes 
@@ -119,7 +123,7 @@ const createEnvelope = async (req, res) => {
     const result = await db.query(totalAmountQuery, [budget_id]);
 
     if (result.rows[0].case === 'false') {
-      res.status(200).send({ message: 'You went over budget, consider another amount' });
+      res.status(400).send({ message: 'You went over budget, consider another amount' });
     } else {
       const newEnvelope = await  db.query('INSERT INTO envelopes (name, amount, budget_id) VALUES ($1, $2, $3) RETURNING *', [name, amount, budget_id]);
       res.status(201).json({message:`Envelope added with ID: ${newEnvelope.rows[0].id}`, data: newEnvelope.rows})
@@ -165,7 +169,11 @@ const createTransaction = async (req, res) => {
 
   } catch(error) {
     await db.query('ROLLBACK');
-    res.status(500).send({error: 'An error occurred while adding transaction' })
+    if (error.code === '23514') { // PostgreSQL error code for check violation
+      res.status(400).send({ message: 'You went over budget' });
+    } else {
+      res.status(500).send({error: 'An error occurred while adding transaction' });
+    }    
   }
 };
 
@@ -212,6 +220,10 @@ const updateBudget = async (req, res) => {
   const id = req.params.budgetId;
   const {amount} = req.body;
 
+  if (!id || !amount) {
+    return res.status(400).json({ error: 'More data required' });
+  };
+
   try {
     const updatedBudget = await  db.query (
       'UPDATE budget SET amount = $1 WHERE id = $2',
@@ -248,7 +260,7 @@ const deleteEnvelope = async (req, res) => {
   
   try{
     const deletedEnvelope = await db.query ('DELETE FROM envelopes WHERE id = $1', [id]);
-    res.status(204).send(`Envelope deleted with ID: ${id}`);
+    res.status(204).send({message: `Envelope deleted with ID: ${id}`});
   } catch(error) {
     return res.status(500).send({error: 'An error occurred while deleting envelope'});
   }
