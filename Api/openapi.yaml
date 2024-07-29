@@ -32,6 +32,20 @@ paths:
                       "budget_id": 1}]
                      }  
           description: Envelope created
+        '400':
+          content:
+            application/json:
+              examples:
+                Checks total budget constraint:
+                  value: '{ message: ''You went over budget, consider another amount'' }'
+          description: Total budget constraint error        
+        '500':
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: '{ error: ''An error occurred while creating envelope'' }'
+          description: An error occured  
       tags:
         - Envelopes
     get:
