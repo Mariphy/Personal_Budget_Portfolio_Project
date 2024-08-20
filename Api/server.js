@@ -36,7 +36,7 @@ server.use('/api/budget', budgetRouter);
 
 //home page
 server.get('/', (req, res, next) => {
-  res.send('<h1>Personal Budget Manager</h1><a href="/api/envelopes">Envelopes</a><a href="/api-docs">Documentation with Swagger</a>')
+  res.send('<h1>Personal Budget Manager</h1><a href="/api-docs">Documentation with Swagger</a><br><a href="/api/envelopes">Envelopes</a>')
 });
 
 server.listen(PORT, () => {
