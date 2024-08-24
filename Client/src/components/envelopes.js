@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import '../App.css';
+import Card from './card';
 
 
 const Envelopes = () => {
@@ -18,17 +20,15 @@ const Envelopes = () => {
   return (
     <div>
         <h2>Envelopes</h2>
-        {envelopes.length > 0 ? (
-          envelopes.map(envelope => (
-            <div key={envelope.id}>
-                <h3>{envelope.name}</h3>
-                <p>{envelope.amount}</p>
-            </div>
-          ))  
-        ) : (
-            <p>No envelopes found.</p>
-        )}
-     
+        <div className = "flex-container">
+            {envelopes.length > 0 ? (
+            envelopes.map(envelope => (
+                <Card key={envelope.id} name={envelope.name} amount={envelope.amount} />
+            ))  
+            ) : (
+                <p>No envelopes found.</p>
+            )}
+        </div>
     </div>
     
   );
