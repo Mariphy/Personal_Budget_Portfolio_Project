@@ -1,16 +1,10 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Light text color */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .App-header {
@@ -28,11 +22,59 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+
+
+
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Space between cards */
+  padding: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-item {
+  background-color: #1e1e1e; /* Dark card background */
+  border-radius: 0.5rem; /* Rounded corners */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 1rem;
+  transition: transform 0.2s;
+  flex: 1 1 calc(25% - 1rem); /* Adjust the width of the cards */
+  max-width: calc(25% - 1rem); /* Ensure cards fit within the container */
+}
+
+.flex-item:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.flex-item h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.flex-item p {
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .flex-item {
+    flex: 1 1 calc(33.33% - 1rem); /* Adjust for medium screens */
+    max-width: calc(33.33% - 1rem);
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (max-width: 768px) {
+  .flex-item {
+    flex: 1 1 calc(50% - 1rem); /* Adjust for small screens */
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .flex-item {
+    flex: 1 1 calc(100% - 1rem); /* Adjust for extra small screens */
+    max-width: calc(100% - 1rem);
   }
 }
