@@ -6,7 +6,7 @@ const getEnvelopes = async (req, res) => {
     if (envelopes.rowCount < 1) {
       return res.status(404).send({message: "Records not found"});
     }
-    res.status(200).json({data: envelopes.rows})
+    res.status(200).send(envelopes.rows)
   } catch(error) {
     res.status(500).json({ error: 'An error occurred while fetching envelopes' });
   }
