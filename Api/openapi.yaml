@@ -59,7 +59,7 @@ paths:
               examples:
                 Success:
                   value: |-
-                    {"id": 1,
+                    [{"id": 1,
                      "name": "groceries",
                      "amount": "$200.00",
                       "budget_id": 1},
@@ -70,7 +70,7 @@ paths:
                     {"id": 3,
                       "name": "utility bills",
                       "amount": "$200.00",
-                      "budget_id": 1}
+                      "budget_id": 1}]
           description: Success
       tags:
         - Envelopes
