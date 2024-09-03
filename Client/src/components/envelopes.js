@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import Card from './card';
+import Button from './button';
+import { useNavigate } from 'react-router-dom';
 
 const Envelopes = ({ onSelectEnvelope }) => {
   const [envelopes, setEnvelopes] = useState([]);
   const [error, setError] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEnvelopes = async () => {
@@ -26,6 +30,15 @@ const Envelopes = ({ onSelectEnvelope }) => {
     fetchEnvelopes();
   }, []);
 
+  const handleAddEnvelope = () => {
+    console.log('Add a new envelope')
+    navigate('/add-envelope');
+  }
+
+  const handleShowAll = () => {
+    setShowAll(true);
+  }
+
   return (
     <div>
       <h2>Categories</h2>
@@ -33,7 +46,7 @@ const Envelopes = ({ onSelectEnvelope }) => {
         {error ? (
           <p>Error: {error}</p>
         ) : envelopes.length > 0 ? (
-          envelopes.map(envelope => (
+          envelopes.slice(0, showAll ? envelopes.length : 6).map(envelope => (
             <Card 
               key={envelope.id} 
               name={envelope.name} 
@@ -45,6 +58,10 @@ const Envelopes = ({ onSelectEnvelope }) => {
           <p>No envelopes found.</p>
         )}
       </div>
+      {!showAll && envelopes.length > 6 && (
+        <Button onClick={handleShowAll}>Show All</Button>
+      )}
+      <Button onClick={handleAddEnvelope}>Add New Category</Button>
     </div>
   );
 };
