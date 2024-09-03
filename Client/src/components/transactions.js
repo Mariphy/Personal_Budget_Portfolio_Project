@@ -36,22 +36,38 @@ const Transactions = ({envelopeId}) => {
     fetchTransactions();
   }, [envelopeId]);
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+  };
+
   return (
     <div>
       <h2>Transactions</h2>
-      <div className="flex-container">
+      <div>
         {error ? (
           <p>Error: {error}</p>
         ) : transactions.length > 0 ? (
-          transactions.map(transaction => (
-            <div key={transaction.id}>
-              <p>{transaction.date}</p>
-              <p>{transaction.amount}</p>
-              <p>{transaction.recipient}</p>
-            </div>
-          ))
+          <table className = "transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Recipient</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map(transaction => (
+                <tr key={transaction.id}>
+                  <td>{formatDate(transaction.date)}</td>
+                  <td>{transaction.amount}</td>
+                  <td>{transaction.recipient}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : (
-          <p>No transactions found.</p>
+          <p>No transactions found in this category.</p>
         )}
       </div>
     </div>
