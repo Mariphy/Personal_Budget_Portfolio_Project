@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import Card from './Card';
+import Card from './card';
 
 const Envelopes = ({ onSelectEnvelope }) => {
   const [envelopes, setEnvelopes] = useState([]);

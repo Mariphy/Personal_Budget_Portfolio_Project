@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
-import Envelopes from './components/Envelopes.js';
-import Transactions from './components/Transactions.js';
+import Envelopes from './components/envelopes.js';
+import Transactions from './components/transactions.js';
 import Budget from './components/budget.js';
 
 function App () {
