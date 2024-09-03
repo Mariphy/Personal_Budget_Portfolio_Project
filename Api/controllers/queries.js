@@ -18,7 +18,7 @@ const getBudget = async (req, res) => {
     if (budget.rowCount < 1) {
       return res.status(404).send({message: "Records not found"});
     }
-    res.status(200).json({data: budget.rows})
+    res.status(200).json(budget.rows)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching budget' });
   }
@@ -56,7 +56,7 @@ const getBudgetById = async (req, res) => {
     if (budget.rows.length === 0) {
       res.status(404).send({message: `Budget with ID ${id} does not exist`});
     } else {
-      res.status(200).json({data: budget.rows})
+      res.status(200).json(budget.rows)
     }
   } catch(error) {
     res.status(500).json({ error: 'An error occurred while fetching budget' });
@@ -90,7 +90,7 @@ const getTransactionById = async (req, res) => {
     if (transaction.rows.length === 0) {
       res.status(404).send({message: `Transaction with ID ${id} does not exist`});
     } else {
-      res.status(200).json({data: transaction.rows})
+      res.status(200).json(transaction.rows)
     }
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching transaction' });
