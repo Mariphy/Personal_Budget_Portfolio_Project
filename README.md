@@ -8,6 +8,8 @@ It divides income into different spending categories and limits spending to the 
 
 It's a Node/Express API, all data is persisted in a database using PostgreSQL.
 
+Front end is deployed on Vercel, you can check it out [here](https://personal-budget-portfolio-project.vercel.app/).
+
 Back end API is deployed on [Render](https://personal-budget-portfolio-project.onrender.com/).
 ## Running the app
 To run locally, run `npm install`, then `npm start`
