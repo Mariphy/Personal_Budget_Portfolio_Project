@@ -15,7 +15,7 @@ const Budget = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setTotalBudget(data); 
+        setTotalBudget(data[0].amount); 
       } catch (error) {
         setError(error.message);
         console.error('There was an error fetching the total budget!', error);
@@ -27,7 +27,7 @@ const Budget = () => {
 
   return (
     <div>
-      <h2>Total Budget: ${totalBudget.amount}</h2>
+      <h2>Total Budget: {totalBudget}</h2>
       {error && <p>Error: {error}</p>}
     </div>
   );
