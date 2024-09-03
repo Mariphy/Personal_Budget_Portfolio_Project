@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Envelopes from './components/envelopes.js';
-import Transactions from './components/transactions.js';
 import Budget from './components/budget.js';
 import AddEnvelopeForm from './components/imputForm.js';
+import EnvelopeDetails from './components/envelopeDetails.js';
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
@@ -18,19 +18,15 @@ function App () {
         </header>
         <main>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <>
+            <Route path="/" element={
                   <Envelopes onSelectEnvelope={setSelectedEnvelopeId} />
-                  <Transactions envelopeId={selectedEnvelopeId} />
-                </>
               }
             />
             <Route path="/add-envelope" element={<AddEnvelopeForm />} />
+            <Route path="/api/envelopes/:envelopeId" element={<EnvelopeDetails />} />
           </Routes>
         </main>
-        <footer></footer>
+        <footer className="App-footer"></footer>
       </div>
     </Router>
   )

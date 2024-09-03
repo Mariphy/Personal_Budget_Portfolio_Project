@@ -31,13 +31,16 @@ const Envelopes = ({ onSelectEnvelope }) => {
   }, []);
 
   const handleAddEnvelope = () => {
-    console.log('Add a new envelope')
     navigate('/add-envelope');
   }
 
   const handleShowAll = () => {
     setShowAll(true);
   }
+
+  const handleSelectEnvelope = (envelopeId) => {
+    navigate(`/api/envelopes/${envelopeId}`);
+  };
 
   return (
     <div>
@@ -51,7 +54,7 @@ const Envelopes = ({ onSelectEnvelope }) => {
               key={envelope.id} 
               name={envelope.name} 
               amount={envelope.amount} 
-              onClick={() => onSelectEnvelope(envelope.id)} 
+              onClick={() => handleSelectEnvelope(envelope.id)} 
             />
           ))
         ) : (
