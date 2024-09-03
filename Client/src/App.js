@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import Envelopes from './components/Envelopes';
-import Transactions from './components/Transactions';
-import Budget from './components/Budget';
+import Envelopes from './components/Envelopes.js';
+import Transactions from './components/Transactions.js';
+import Budget from './components/budget.js';
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
