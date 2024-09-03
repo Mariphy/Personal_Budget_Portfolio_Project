@@ -28,7 +28,7 @@ const Envelopes = ({ onSelectEnvelope }) => {
 
   return (
     <div>
-      <h2>Envelopes</h2>
+      <h2>Categories</h2>
       <div className="flex-container">
         {error ? (
           <p>Error: {error}</p>
