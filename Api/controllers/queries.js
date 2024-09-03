@@ -36,7 +36,7 @@ const getEnvelopeById = async (req, res) => {
     if (envelope.rows.length === 0) {
       res.status(404).send({message: `Envelope with ID ${id} does not exist`});
     } else {
-      res.status(200).json({data: envelope.rows});
+      res.status(200).json(envelope.rows);
     }
   } catch(error) {
     res.status(500).json({ error: 'An error occurred while fetching envelope' });
@@ -71,7 +71,7 @@ const getTransactionByEnvelope = async (req, res) => {
     if (transactions.rows.length === 0) {
       res.status(404).send({message: `No transactions for this envelope`});
     } else {
-      res.status(200).json({data: transactions.rows});
+      res.status(200).json(transactions.rows);
     }
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching transactions' });
