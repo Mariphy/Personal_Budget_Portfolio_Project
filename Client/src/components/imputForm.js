@@ -30,7 +30,7 @@ const AddEnvelopeForm = () => {
   };
 
   return (
-    <div>
+    <div className="new-envelope-form">
       <h2>Add New Envelope</h2>
       <form onSubmit={handleSubmit}>
         <div>
