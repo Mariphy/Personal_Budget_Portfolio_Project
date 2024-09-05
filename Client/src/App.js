@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Envelopes from './components/envelopes.js';
 import Budget from './components/budget.js';
-import AddEnvelopeForm from './components/imputForm.js';
+import AddEnvelopeForm from './components/inputForm.js';
 import EnvelopeDetails from './components/envelopeDetails.js';
+import UpdateEnvelopeForm from './components/updateEnvelopeForm.js'
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
@@ -23,6 +24,7 @@ function App () {
               }
             />
             <Route path="/add-envelope" element={<AddEnvelopeForm />} />
+            <Route path="/update-envelope/:envelopeId" element={<UpdateEnvelopeForm />} />
             <Route path="/api/envelopes/:envelopeId" element={<EnvelopeDetails />} />
           </Routes>
         </main>
