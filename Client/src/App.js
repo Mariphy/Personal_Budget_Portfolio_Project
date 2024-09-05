@@ -16,7 +16,7 @@ function App () {
           <h1>Personal Budget Manager</h1>
           <Budget />
         </header>
-        <main>
+        <main className="main-content">
           <Routes>
             <Route path="/" element={
                   <Envelopes onSelectEnvelope={setSelectedEnvelopeId} />
