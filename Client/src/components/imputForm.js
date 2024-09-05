@@ -31,7 +31,7 @@ const AddEnvelopeForm = () => {
 
   return (
     <div className="new-envelope-form">
-      <h2>Add New Envelope</h2>
+      <h2>Add New Category</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
@@ -61,7 +61,7 @@ const AddEnvelopeForm = () => {
           />
         </div>
         {error && <p>Error: {error}</p>}
-        <Button type="submit">Add Envelope</Button>
+        <Button type="submit">Add Category</Button>
       </form>
     </div>
   );

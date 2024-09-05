@@ -149,7 +149,7 @@
 .new-envelope-form label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
+  font-weight: lighter;
 }
 
 .new-envelope-form input {
@@ -167,7 +167,7 @@
 
 .new-envelope-form p {
   color: #ff4d4d;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .new-envelope-form button {
