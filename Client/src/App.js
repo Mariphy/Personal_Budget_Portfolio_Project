@@ -5,7 +5,8 @@ import Envelopes from './components/envelopes.js';
 import Budget from './components/budget.js';
 import AddEnvelopeForm from './components/inputForm.js';
 import EnvelopeDetails from './components/envelopeDetails.js';
-import UpdateEnvelopeForm from './components/updateEnvelopeForm.js'
+import UpdateEnvelopeForm from './components/updateEnvelopeForm.js';
+import Header from './components/header.js';
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
@@ -13,11 +14,9 @@ function App () {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <h1>Personal Budget Manager</h1>
-          <Budget />
-        </header>
+        <Header />
         <main className="main-content">
+          <Budget />
           <Routes>
             <Route path="/" element={
                   <Envelopes onSelectEnvelope={setSelectedEnvelopeId} />
