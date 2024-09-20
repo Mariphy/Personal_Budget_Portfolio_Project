@@ -24,6 +24,13 @@
   color: white;
 }
 
+.title {
+  font-size: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+}
+
 .App-footer {
   background-color: #282c34;
   min-height: 10vh;
@@ -43,7 +50,6 @@
 .main-content {
   flex: 1;
 }
-
 
 .transactions-table {
   margin: 20px auto;
@@ -182,5 +188,64 @@
 }
 
 .new-envelope-form button:hover {
+  background-color: #0056b3;
+}
+
+.new-transaction-form {
+  background-color: #282c34;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 20px auto;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.new-transaction-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.new-transaction-form form div {
+  margin-bottom: 15px;
+}
+
+.new-transaction-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: lighter;
+}
+
+.new-transaction-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.new-transaction-form input:focus {
+  border-color: #61dafb;
+  outline: none;
+}
+
+.new-transaction-form p {
+  color: #ff4d4d;
+  font-weight: normal;
+}
+
+.new-transaction-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+}
+
+.new-transaction-form button:hover {
   background-color: #0056b3;
 }

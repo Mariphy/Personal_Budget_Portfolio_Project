@@ -4,7 +4,9 @@ import '../App.css';
 const Header = () => {
   return (
     <header className="App-header">
-        <h1>Personal Budget Manager</h1>
+        <a className='title' href="/">
+          Personal Budget Manager
+        </a>
     </header>
     
   );
