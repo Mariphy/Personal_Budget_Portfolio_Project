@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Button from './button';
 
 const AddEnvelopeForm = () => {
+  const budgetId = 1;
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
-  const [budgetId, setBudgetId] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -48,15 +48,6 @@ const AddEnvelopeForm = () => {
             type="number" 
             value={amount} 
             onChange={(e) => setAmount(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Budget ID:</label>
-          <input 
-            type="text" 
-            value={budgetId} 
-            onChange={(e) => setBudgetId(e.target.value)} 
             required 
           />
         </div>
