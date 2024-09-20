@@ -34,6 +34,10 @@ const EnvelopeDetails = () => {
     navigate(`/update-envelope/${envelopeId}`, { state: { envelope } });
   };
 
+  const handleAddTransaction = () => {
+    navigate(`/add-transaction/${envelopeId}`, { state: { envelope } });
+  };
+
   const handleDelete = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes/${envelopeId}`, {
@@ -62,6 +66,7 @@ const EnvelopeDetails = () => {
           <Transactions envelopeId={envelopeId} />
           <Button onClick={handleUpdate}>Update Category</Button>
           <Button onClick={handleDelete}>Delete Category</Button> 
+          <Button onClick={handleAddTransaction}>Add Transaction</Button>
         </div>
       ) : (
         <p>Loading...</p>

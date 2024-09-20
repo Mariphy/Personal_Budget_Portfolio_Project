@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
 const Transactions = ({envelopeId}) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!envelopeId) return;
@@ -41,6 +43,10 @@ const Transactions = ({envelopeId}) => {
     return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
   };
 
+  const handleEdit = () => {
+    navigate(`/add-transaction/${envelopeId}`);
+  }
+
   return (
     <div>
       <h2>Transactions</h2>
@@ -54,6 +60,7 @@ const Transactions = ({envelopeId}) => {
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Recipient</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -62,6 +69,7 @@ const Transactions = ({envelopeId}) => {
                   <td>{formatDate(transaction.date)}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.recipient}</td>
+                  <td onClick={handleEdit}>Edit</td>
                 </tr>
               ))}
             </tbody>

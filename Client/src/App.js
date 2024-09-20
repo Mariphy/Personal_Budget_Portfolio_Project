@@ -7,6 +7,7 @@ import AddEnvelopeForm from './components/inputForm.js';
 import EnvelopeDetails from './components/envelopeDetails.js';
 import UpdateEnvelopeForm from './components/updateEnvelopeForm.js';
 import Header from './components/header.js';
+import AddTransactionForm from './components/addTransactionForm.js';
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
@@ -24,6 +25,7 @@ function App () {
             />
             <Route path="/add-envelope" element={<AddEnvelopeForm />} />
             <Route path="/update-envelope/:envelopeId" element={<UpdateEnvelopeForm />} />
+            <Route path="/add-transaction/:envelopeId" element={<AddTransactionForm />} />
             <Route path="/api/envelopes/:envelopeId" element={<EnvelopeDetails />} />
           </Routes>
         </main>
