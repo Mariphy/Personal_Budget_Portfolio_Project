@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from './button';
 
 const AddTransactionForm = () => {
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
-  const [envelopeId, setEnvelopeId] = useState('');
+  const { envelopeId } = useParams();
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const AddTransactionForm = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      navigate('/'); // Redirect to the main page after successful submission
+      navigate('/'); 
     } catch (error) {
       setError(error.message);
       console.error('There was an error adding the transaction!', error);
@@ -58,15 +58,6 @@ const AddTransactionForm = () => {
             type="text" 
             value={recipient} 
             onChange={(e) => setRecipient(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Envelope ID:</label>
-          <input 
-            type="text" 
-            value={envelopeId} 
-            onChange={(e) => setEnvelopeId(e.target.value)} 
             required 
           />
         </div>
