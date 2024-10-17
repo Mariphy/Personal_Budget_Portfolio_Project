@@ -55,18 +55,21 @@ const EnvelopeDetails = () => {
   };    
 
   return (
-    <div>
+    <div className='envelope-details'>
       {error ? (
         <p>Error: {error}</p>
       ) : envelope ? (
         <div>
-          <h2>{envelope.name}</h2>
-          <p>{envelope.amount}</p>
-          
-          <Transactions envelopeId={envelopeId} />
-          <Button onClick={handleUpdate}>Update Category</Button>
-          <Button onClick={handleDelete}>Delete Category</Button> 
-          <Button onClick={handleAddTransaction}>Add Transaction</Button>
+          <div className='frame-content'>
+            <h2>{envelope.name}</h2>
+            <p>{envelope.amount}</p>
+            <Transactions envelopeId={envelopeId} />
+            <Button onClick={handleAddTransaction}>Add Transaction</Button>
+          </div>
+          <div>
+            <Button onClick={handleUpdate}>Update Category</Button>
+            <Button onClick={handleDelete}>Delete Category</Button> 
+          </div>
         </div>
       ) : (
         <p>Loading...</p>
