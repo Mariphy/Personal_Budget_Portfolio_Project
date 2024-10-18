@@ -8,6 +8,7 @@ import EnvelopeDetails from './components/envelopeDetails.js';
 import UpdateEnvelopeForm from './components/updateEnvelopeForm.js';
 import Header from './components/header.js';
 import AddTransactionForm from './components/addTransactionForm.js';
+import UpdateTransactionForm from './components/updateTransactionForm.js';
 
 function App () {
   const [selectedEnvelopeId, setSelectedEnvelopeId] = useState(null);
@@ -26,7 +27,8 @@ function App () {
             <Route path="/add-envelope" element={<AddEnvelopeForm />} />
             <Route path="/update-envelope/:envelopeId" element={<UpdateEnvelopeForm />} />
             <Route path="/add-transaction/:envelopeId" element={<AddTransactionForm />} />
-            <Route path="/api/envelopes/:envelopeId" element={<EnvelopeDetails />} />
+            <Route path="/envelopes/:envelopeId" element={<EnvelopeDetails />} />
+            <Route path="/envelopes/:envelopeId/transactions/:transactionId/update" element={<UpdateTransactionForm />} />
           </Routes>
         </main>
         <footer className="App-footer"></footer>

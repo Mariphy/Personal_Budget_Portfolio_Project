@@ -192,7 +192,8 @@
   background-color: #0056b3;
 }
 
-.new-transaction-form {
+.new-transaction-form, 
+.update-transaction-form {
   background-color: #282c34;
   padding: 20px;
   border-radius: 8px;
@@ -202,23 +203,27 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.new-transaction-form h2 {
+.new-transaction-form h2, 
+.update-transaction-form h2 {
   margin-bottom: 20px;
   font-size: 24px;
   text-align: center;
 }
 
-.new-transaction-form form div {
+.new-transaction-form form div, 
+.update-transaction-form form div {
   margin-bottom: 15px;
 }
 
-.new-transaction-form label {
+.new-transaction-form label, 
+.update-transaction-form label {
   display: block;
   margin-bottom: 5px;
   font-weight: lighter;
 }
 
-.new-transaction-form input {
+.new-transaction-form input, 
+.update-transaction-form input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -226,17 +231,20 @@
   box-sizing: border-box;
 }
 
-.new-transaction-form input:focus {
+.new-transaction-form input:focus, 
+.update-transaction-form input:focus {
   border-color: #61dafb;
   outline: none;
 }
 
-.new-transaction-form p {
+.new-transaction-form p, 
+.update-transaction-form p {
   color: #ff4d4d;
   font-weight: normal;
 }
 
-.new-transaction-form button {
+.new-transaction-form button, 
+.update-transaction-form button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -247,7 +255,8 @@
   width: 100%;
 }
 
-.new-transaction-form button:hover {
+.new-transaction-form button:hover, 
+.update-transaction-form button:hover {
   background-color: #0056b3;
 }
 
@@ -284,3 +293,8 @@
     max-width: calc(100% - 2rem); /* Adjust for extra small screens */
   }
 }    
+
+.edit-button,
+.delete-button {
+  cursor: pointer;
+}

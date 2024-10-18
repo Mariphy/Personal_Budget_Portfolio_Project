@@ -11,8 +11,6 @@ const Transactions = ({envelopeId}) => {
   useEffect(() => {
     if (!envelopeId) return;
 
-    console.log('Fetching transactions for envelope ID:', envelopeId);
-
     const fetchTransactions = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes/${envelopeId}/transactions`, {
@@ -43,9 +41,25 @@ const Transactions = ({envelopeId}) => {
     return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
   };
 
-  const handleEdit = () => {
-    navigate(`/add-transaction/${envelopeId}`);
+  const handleEdit = (transactionId) => {
+    navigate(`/envelopes/${envelopeId}/transactions/${transactionId}/update`);
   }
+
+  const handleDelete = async (transactionId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes/${envelopeId}/transactions/${transactionId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Make sure there are no transactions in this category before deleting');
+      }
+      alert('Transaction deleted successfully!');
+      navigate('/'); // Redirect to the home page or another page after deletion
+    } catch (error) {
+      setError(error.message);
+      console.error('There was an error deleting the category!', error);
+    }
+  };   
 
   return (
     <div>
@@ -60,7 +74,8 @@ const Transactions = ({envelopeId}) => {
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Recipient</th>
-                <th>Actions</th>
+                <th>Edit</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -69,7 +84,8 @@ const Transactions = ({envelopeId}) => {
                   <td>{formatDate(transaction.date)}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.recipient}</td>
-                  <td onClick={handleEdit}>Edit</td>
+                  <td className='edit-button' onClick={()=> handleEdit(transaction.id)}>Edit</td>
+                  <td className='delete-button' onClick={()=>handleDelete(transaction.id)}>Delete</td>
                 </tr>
               ))}
             </tbody>

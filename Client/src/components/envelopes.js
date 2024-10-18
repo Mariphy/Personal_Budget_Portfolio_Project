@@ -39,7 +39,7 @@ const Envelopes = ({ onSelectEnvelope }) => {
   }
 
   const handleSelectEnvelope = (envelopeId) => {
-    navigate(`/api/envelopes/${envelopeId}`);
+    navigate(`/envelopes/${envelopeId}`);
   };
 
   return (
