@@ -10,6 +10,8 @@ It's a Node/Express API, all data is persisted in a database using PostgreSQL.
 
 Front end is deployed on Vercel, you can check it out [here](https://personal-budget-portfolio-project.vercel.app/).
 
+Please allow up to 50 sec to initial load as I am using a free database.
+
 Back end API is deployed on [Render](https://personal-budget-portfolio-project.onrender.com/).
 ## Running the app
 To run locally, run `npm install`, then `npm start`
