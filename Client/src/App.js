@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Envelopes from './components/envelopes.js';
 import Budget from './components/budget.js';
-import AddEnvelopeForm from './components/inputForm.js';
+import AddEnvelopeForm from './components/addEnvelopeForm.js';
 import EnvelopeDetails from './components/envelopeDetails.js';
 import UpdateEnvelopeForm from './components/updateEnvelopeForm.js';
 import Header from './components/header.js';
