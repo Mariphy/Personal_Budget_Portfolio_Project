@@ -8,6 +8,7 @@ const UpdateTransactionForm = () => {
     const [amount, setAmount] = useState('');
     const [recipient, setRecipient] = useState('');
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,9 +19,12 @@ const UpdateTransactionForm = () => {
               throw new Error('Failed to fetch transaction data');
             }
             const transaction = await response.json();
-            setDate(transaction.date);
-            setAmount(transaction.amount);
-            setRecipient(transaction.recipient);
+            const formattedDate = transaction[0].date.split('T')[0];
+            const formattedAmount = parseFloat(transaction[0].amount.replace('$', ''));
+            setDate(formattedDate);
+            setAmount(formattedAmount);
+            setRecipient(transaction[0].recipient);
+            setIsLoading(false);
           } catch (error) {
             setError(error.message);
           }
@@ -54,28 +58,34 @@ const UpdateTransactionForm = () => {
         <h2>Update Transaction</h2>
         <form onSubmit={handleSubmit}>
             <div>
-            <label>Date:</label>
+            <label htmlFor="date">Date:</label>
             <input 
-                type="date" 
-                value={date} 
+                type="date"
+                id="date"
+                name="date" 
+                value={date || ''} 
                 onChange={(e) => setDate(e.target.value)} 
                 required 
             />
             </div>
             <div>
-            <label>Amount:</label>
+            <label htmlFor="amount">Amount:</label>
             <input 
                 type="number" 
-                value={amount} 
+                id="amount"
+                name="amount"
+                value={amount || ''} 
                 onChange={(e) => setAmount(e.target.value)} 
                 required 
             />
             </div>
             <div>
-            <label>Recipient:</label>
+            <label htmlFor="recipient">Recipient:</label>
             <input 
                 type="text" 
-                value={recipient} 
+                id="recipient"
+                name="recipient"
+                value={recipient || ''} 
                 onChange={(e) => setRecipient(e.target.value)} 
                 required 
             />
