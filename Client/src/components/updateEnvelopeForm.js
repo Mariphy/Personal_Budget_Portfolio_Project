@@ -6,11 +6,13 @@ const UpdateEnvelopeForm = () => {
   const location = useLocation();
   const { envelope } = location.state;
   const [name, setName] = useState(envelope.name || '');
-  const [amount, setAmount] = useState(envelope.amount || '');
-  const [budgetId, setBudgetId] = useState(envelope.budget_id || '');
+  const [amount, setAmount] = useState(envelope.amount.replace(/[$,]/g, '') || '');
+  const [budgetId, setBudgetId] = useState(envelope.budget_id || '1');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { envelopeId } = useParams();
+
+  console.log({ envelopeId, name, amount, budgetId });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,10 +24,16 @@ const UpdateEnvelopeForm = () => {
         },
         body: JSON.stringify({ envelopeId, name, amount, budget_id: budgetId })
       });
+
+      const responseData = await response.json(); // Capture response data
+      console.log('Response Status:', response.status);
+      console.log('Response Data:', responseData);
+
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(responseData.message || 'Network response was not ok');
       }
-      navigate('/'); // Redirect to the main page after successful submission
+      navigate('/');
     } catch (error) {
       setError(error.message);
       console.error('There was an error updating the envelope!', error);
@@ -51,15 +59,6 @@ const UpdateEnvelopeForm = () => {
             type="number" 
             value={amount} 
             onChange={(e) => setAmount(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Budget ID:</label>
-          <input 
-            type="text" 
-            value={budgetId} 
-            onChange={(e) => setBudgetId(e.target.value)} 
             required 
           />
         </div>
