@@ -205,7 +205,7 @@ const updateEnvelope = async (req, res) => {
     const result = await db.query(totalAmountQuery, [budget_id]);
 
     if (result.rows[0].case === 'false') {
-      res.status(200).send({ message: 'You went over budget, consider another amount' });
+      res.status(400).send({ message: 'You went over budget, consider another amount' });
     } else {
       const updatedEnvelope = await db.query ('UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
       [name, amount, budget_id, id]);
