@@ -17,18 +17,38 @@
   background-color: #23262d;
   min-height: 5vh;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px 20px;
 }
 
 .title {
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 600;
   text-decoration: none;
   color: #fff;
+  margin-right: auto;
+}
+
+.header-nav {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.nav-link {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }
 
 .App-footer {
@@ -41,6 +61,20 @@
   font-size: calc(10px + 2vmin);
   color: white;
   margin-top: auto;
+  font-family: 'Inter', sans-serif; 
+  font-size: 14px; 
+  padding: 20px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.social-icons img {
+  width: 30px; 
+  margin: 0 10px;
 }
 
 .App-link {
@@ -278,7 +312,7 @@
 }
 
 .frame-content {
-  background-color: #23262d; /* Dark background color */
+  background-color: #23262d; 
   border-radius: 7px; /* Rounded corners */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* Add shadow and inset border */
   padding: 1rem; /* Add padding inside the frame */

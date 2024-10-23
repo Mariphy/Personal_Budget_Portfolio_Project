@@ -7,6 +7,7 @@ import AddEnvelopeForm from './components/addEnvelopeForm.js';
 import EnvelopeDetails from './components/envelopeDetails.js';
 import UpdateEnvelopeForm from './components/updateEnvelopeForm.js';
 import Header from './components/header.js';
+import Footer from './components/footer.js';
 import AddTransactionForm from './components/addTransactionForm.js';
 import UpdateTransactionForm from './components/updateTransactionForm.js';
 
@@ -31,7 +32,7 @@ function App () {
             <Route path="/envelopes/:envelopeId/transactions/:transactionId/update" element={<UpdateTransactionForm />} />
           </Routes>
         </main>
-        <footer className="App-footer"></footer>
+        <Footer />
       </div>
     </Router>
   )
