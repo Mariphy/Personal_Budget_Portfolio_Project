@@ -113,16 +113,15 @@ const createEnvelope = async (req, res) => {
       FROM budget
       WHERE id = $1
     )
-    SELECT total_amount.total, current_budget.amount,
-      CASE 
-        WHEN total_amount.total < current_budget.amount THEN 'true'
-        ELSE 'false'
-      END
+    SELECT total_amount.total, current_budget.amount
     FROM total_amount, current_budget`;
   try {
     const result = await db.query(totalAmountQuery, [budget_id]);
+    const totalAmount = result.rows[0].total;
+    const currentBudget = result.rows[0].amount;
+    const parseMoney = (moneyStr) => parseFloat(moneyStr.replace(/[$,]/g, ''));
 
-    if (result.rows[0].case === 'false') {
+    if ((parseMoney(totalAmount) + parseMoney(amount)) > parseMoney(currentBudget)) {
       res.status(400).send({ message: 'You went over budget, consider another amount' });
     } else {
       const newEnvelope = await  db.query('INSERT INTO envelopes (name, amount, budget_id) VALUES ($1, $2, $3) RETURNING *', [name, amount, budget_id]);
