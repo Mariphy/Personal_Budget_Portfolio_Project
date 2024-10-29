@@ -179,6 +179,11 @@ const createTransaction = async (req, res) => {
 const updateEnvelope = async (req, res) => {
   const id = req.params.envelopeId;
   const {name, amount, budget_id} = req.body;
+
+  if (!id || !name || !amount || !budget_id) {
+    return res.status(400).json({ error: 'More data required' });
+  };
+
   const totalAmountQuery = `WITH total_amount AS (
     SELECT SUM(amount) AS total
     FROM envelopes 
@@ -189,21 +194,16 @@ const updateEnvelope = async (req, res) => {
     FROM budget
     WHERE id = $1
   )
-  SELECT total_amount.total, current_budget.amount,
-    CASE 
-      WHEN total_amount.total < current_budget.amount THEN 'true'
-      ELSE 'false'
-    END
+  SELECT total_amount.total, current_budget.amount
   FROM total_amount, current_budget`;
 
-  if (!id || !name || !amount || !budget_id) {
-    return res.status(400).json({ error: 'More data required' });
-  };
+try {
+  const result = await db.query(totalAmountQuery, [budget_id]);
+  const totalAmount = result.rows[0].total;
+  const currentBudget = result.rows[0].amount;
+  const parseMoney = (moneyStr) => parseFloat(moneyStr.replace(/[$,]/g, ''));
 
-  try {
-    const result = await db.query(totalAmountQuery, [budget_id]);
-
-    if (result.rows[0].case === 'false') {
+  if ((parseMoney(totalAmount) + parseMoney(amount)) > parseMoney(currentBudget)) {
       res.status(400).send({ message: 'You went over budget, consider another amount' });
     } else {
       const updatedEnvelope = await db.query ('UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
@@ -277,7 +277,7 @@ const deleteEnvelope = async (req, res) => {
     if (error.code === '23503') { // PostgreSQL error code for foreign key constraint violation
       res.status(400).send({ message: 'You have transactions associated with this envelope' });
     } else {
-      res.status(500).send({error: 'An error occurred while adding transaction' });
+      res.status(500).send({error: 'An error occurred while deleting transaction' });
     }    
   }
 };
