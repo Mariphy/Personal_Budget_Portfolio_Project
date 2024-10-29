@@ -138,7 +138,7 @@ const createBudget = async (req, res) => {
   
   try {
     if (!amount) {
-      res.status(400).json({message: "budget not created"})
+      res.status(400).json({message: "Please add your budget amount"})
     } else {
       const newBudget = await  db.query('INSERT INTO budget (amount) VALUES ($1) RETURNING *', [amount]);
       res.status(201).json({message:`Budget added with ID: ${newBudget.rows[0].id}`, data: newBudget.rows});
