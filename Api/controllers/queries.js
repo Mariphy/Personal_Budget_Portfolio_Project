@@ -12,18 +12,6 @@ const getEnvelopes = async (req, res) => {
   }
 };
 
-const getBudget = async (req, res) => {
-  try {
-    const budget = await db.query('SELECT * FROM budget ORDER BY id ASC');
-    if (budget.rowCount < 1) {
-      return res.status(404).send({message: "Records not found"});
-    }
-    res.status(200).json(budget.rows)
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching budget' });
-  }
-};
-
 const getEnvelopeById = async (req, res) => {
   const id = req.params.envelopeId;
 
@@ -334,7 +322,6 @@ module.exports = { getEnvelopes,
   updateEnvelope, 
   deleteEnvelope,
   createBudget,
-  getBudget,
   getBudgetById,
   deleteBudget,
   updateBudget,
