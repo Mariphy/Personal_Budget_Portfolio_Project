@@ -38,14 +38,18 @@ paths:
               examples:
                 Checks total budget constraint:
                   value: '{ message: ''You went over budget, consider another amount'' }'
-          description: Total budget constraint error        
+                Request fields check:
+                  value: '{message: ''Add name and amount of the envelope''}'
+          description: >-
+            Total budget constraint error or missing information in the request
+            body
         '500':
           content:
             application/json:
               examples:
                 Error:
                   value: '{ error: ''An error occurred while creating envelope'' }'
-          description: An error occured  
+          description: An error occured
       tags:
         - Envelopes
     get:
@@ -59,19 +63,52 @@ paths:
               examples:
                 Success:
                   value: |-
-                    [{"id": 1,
-                     "name": "groceries",
-                     "amount": "$200.00",
-                      "budget_id": 1},
-                    {"id": 2,
-                     "name": "rent",
-                     "amount": "$200.00",
-                      "budget_id": 1}, 
-                    {"id": 3,
-                      "name": "utility bills",
-                      "amount": "$200.00",
-                      "budget_id": 1}]
+                    [
+                        {
+                            "id": 1,
+                            "name": "Travel",
+                            "amount": "$205.00",
+                            "budget_id": 1
+                        },
+                        {
+                            "id": 2,
+                            "name": "Shopping",
+                            "amount": "$200.00",
+                            "budget_id": 1
+                        },
+                        {
+                            "id": 16,
+                            "name": "Groceries",
+                            "amount": "$200.00",
+                            "budget_id": 1
+                        },
+                        {
+                            "id": 17,
+                            "name": "Other",
+                            "amount": "$200.00",
+                            "budget_id": 1
+                        },
+                        {
+                            "id": 18,
+                            "name": "Rent",
+                            "amount": "$200.00",
+                            "budget_id": 1
+                        },
+                        {
+                            "id": 22,
+                            "name": "Medical",
+                            "amount": "$100.00",
+                            "budget_id": 1
+                        }
+                    ]
           description: Success
+        '500':
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: '{ error: ''An error occurred while fetching envelopes'' }'
+          description: Handles errors
       tags:
         - Envelopes
   /api/envelopes/{envelopeId}:
@@ -103,6 +140,27 @@ paths:
                       "budget_id": 1
                      }
           description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Envelope ID not provided:
+                  value: '{ error: ''Envelope ID is required'' }'
+          description: Throws an error if envelope ID is not provided
+        '404':
+          content:
+            application/json:
+              examples:
+                Envelope does not exist:
+                  value: '{message: `Envelope with ID ${id} does not exist`}'
+          description: Throws an error if envelope does not exist
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{ error: ''An error occurred while fetching envelope'' }'
+          description: Throws an error if something goes wrong
       tags:
         - Envelopes
     put:
@@ -129,9 +187,27 @@ paths:
               examples:
                 Updated:
                   value: '{"message": "Envelope modified with ID: 1"}'
-          description: Updated
+          description: Category was updated successfully
+        '400':
+          content:
+            application/json:
+              examples:
+                Budget check:
+                  value: '{ message: ''You went over budget, consider another amount'' }'
+                Missing data:
+                  value: '{ error: ''More data required'' }'
+          description: >-
+            Throws an error if envelope ID, category name, category amount or
+            budget ID was not provided or if the amount is over the budget
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{error: ''An error occurred while updating envelope''}'
+          description: Throws an error if something went wrong
       tags:
-        - Envelopes    
+        - Envelopes
     delete:
       summary: Delete an envelope
       description: Deletes an envelope with a matching id from the database
@@ -151,6 +227,24 @@ paths:
                 Success:
                   value: '{"message": "Envelope deleted with ID: 1"}'
           description: Success
+        '400':
+          content:
+            application/json:
+              examples:
+                Check if there are transactions associated with the category:
+                  value: >-
+                    { message: 'You have transactions associated with this
+                    envelope' }
+          description: >-
+            Throws an error if there are yransactions associated with the
+            category
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{error: ''An error occurred while deleting transaction'' }'
+          description: Throws an error if something went wrong
       tags:
         - Envelopes
   /api/budget:
@@ -172,26 +266,22 @@ paths:
             application/json:
               examples:
                 Success:
-                  value: '{"message": "Amount added"}'
-          description: Success
-      tags:
-        - Budget
-    get:
-      summary: Get the list of budgets
-      description: Retrieve the list of budgets (for different users) from database
-      operationId: get_budget
-      responses:
-        '200':
+                  value: '{message:''Budget added with ID: 1, $10 000''}'
+          description: Budget was added successfully
+        '400':
           content:
             application/json:
               examples:
-                Success:
-                  value: |-
-                    [{ "id": 1,
-                       "amount": "$790.00" },
-                    { "id": 2,
-                      "amount": "$200.00" }]
-          description: Success
+                More data is needed:
+                  value: '{message: "Please add your budget amount"}'
+          description: Budget amount was not provided
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{ error: ''An error occurred while creating budget'' }'
+          description: Something went wrong
       tags:
         - Budget
   /api/budget/{budgetId}:
@@ -209,8 +299,38 @@ paths:
           schema:
             type: integer
       responses:
-        default:
-          description: Default error sample response
+        '200':
+          content:
+            application/json:
+              examples:
+                Gets user's budget:
+                  value: |-
+                    {
+                      "id": 1,
+                      "amount": "$10 000.00"
+                    }
+          description: Success response          
+        '400':
+          content:
+            application/json:
+              examples:
+                Missing budget ID:
+                  value: '{ error: ''Budget ID is required'' }'
+          description: Error response if budget ID was not provided        
+        '404':
+          content:
+            application/json:
+              examples:
+                Budget not found:
+                  value: '{message: `Budget with ID 1 does not exist`}'
+          description: Error response if budget was not found        
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{ error: ''An error occurred while fetching budget'' }'
+          description: Error response
       tags:
         - Budget
     put:
@@ -231,8 +351,31 @@ paths:
             schema:
               $ref: '#/components/schemas/Budget'
       responses:
-        default:
-          description: Default error sample response
+        '200':
+          content:
+            application/json:
+              examples:
+                Success:
+                  value: |-
+                    {
+                      "id": 0,
+                      "amount": "$10 000"
+                    }
+          description: Success response          
+        '400':
+          content:
+            application/json:
+              examples:
+                Budget ID or amount is missing:
+                  value: '{ error: ''More data required'' }'
+          description: Error response if budget ID or amount was not provided        
+        '500':
+          content:
+            application/json:
+              examples:
+                Error Handler:
+                  value: '{error: ''An error occurred while updating budget''}'
+          description: Error response
       tags:
         - Budget
     delete:
