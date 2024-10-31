@@ -196,7 +196,7 @@ try {
     } else {
       const updatedEnvelope = await db.query ('UPDATE envelopes SET name = $1, amount = $2 , budget_id = $3 WHERE id = $4',
       [name, amount, budget_id, id]);
-      res.status(200).send({message: `Envelope modified with ID: ${id}`, data: updatedEnvelope.rows[0]})  
+      res.status(200).send({message: `Envelope modified with ID: ${id}`})  
     }  
   } catch(error) {
     return res.status(500).send({error: 'An error occurred while updating envelope'});
@@ -213,7 +213,7 @@ const updateBudget = async (req, res) => {
 
   try {
     const updatedBudget = await  db.query (
-      'UPDATE budget SET amount = $1 WHERE id = $2',
+      'UPDATE budget SET amount = $1 WHERE id = $2 RETURNING *',
       [amount, id]);
     res.status(200).send({message: `Budget modified with ID: ${id}`, data: updatedBudget.rows[0]})  
   } catch(error) {
@@ -237,7 +237,7 @@ const updateTransaction = async (req, res) => {
     await db.query  ('UPDATE envelopes SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount.rows[0].amount, amount, envelope_id]);
     await db.query('UPDATE budget SET amount = amount + $1 - $2 WHERE id = $3', [previousAmount.rows[0].amount, amount, budget_id]);
     await db.query('COMMIT');
-    res.status(200).send({message: `Transaction modified with ID: ${id}`, data: updatedTransaction.rows[0]});
+    res.status(200).send({message: `Transaction modified with ID: ${id}`});
   } catch(error) {
     await db.query('ROLLBACK');
     if (error.code === '23514') { // PostgreSQL error code for check violation
