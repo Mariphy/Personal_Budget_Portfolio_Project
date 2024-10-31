@@ -287,7 +287,7 @@ const deleteBudget = async (req, res) => {
     if (error.code === '23503') { // PostgreSQL error code for foreign key constraint violation
       res.status(400).send({ message: 'You have envelopes associated with this budget' });
     } else {
-      res.status(500).send({error: 'An error occurred while adding transaction' });
+      res.status(500).send({error: 'An error occurred while deleting budget' });
     }    
   }
  
