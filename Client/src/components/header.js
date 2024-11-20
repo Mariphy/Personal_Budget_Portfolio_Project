@@ -11,7 +11,7 @@ const Header = () => {
         </a>
         <nav className="header-nav">
             <Link to="/" className="nav-link">Home</Link>
-            <Link to="/add-envelope" className="nav-link">Add Envelope</Link>
+            <Link to="/add-envelope" className="nav-link">Add Category</Link>
             <a href="https://github.com/Mariphy/Personal_Budget_Portfolio_Project" target="_blank" rel="noopener noreferrer" className="nav-link">
               GitHub
             </a>
