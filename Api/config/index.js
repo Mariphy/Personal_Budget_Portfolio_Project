@@ -2,13 +2,10 @@ const Pool = require('pg').Pool;
 require('dotenv').config();
  
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  connectionString: process.env.DATABASE_URL
 });
 
 const query = (text, params) => {
-    console.log('Connecting to:', process.env.DATABASE_URL);
-
     return new Promise((resolve, reject) => {
       pool.query('SELECT NOW()')
         .then(res => console.log('Connected! Time:', res.rows[0].now))
