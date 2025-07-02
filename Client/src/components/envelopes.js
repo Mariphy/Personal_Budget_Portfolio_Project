@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import '../App.css';
 import Card from './card';
 import Button from './button';
+import SkeletonCard from './skeletonCard';
 import { useNavigate } from 'react-router-dom';
 
 const Envelopes = ({ onSelectEnvelope }) => {
   const [envelopes, setEnvelopes] = useState([]);
   const [error, setError] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEnvelopes = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes`, {
           method: 'GET'
@@ -24,6 +27,8 @@ const Envelopes = ({ onSelectEnvelope }) => {
       } catch (error) {
         setError(error.message);
         console.error('There was an error fetching the data!', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -42,12 +47,23 @@ const Envelopes = ({ onSelectEnvelope }) => {
     navigate(`/envelopes/${envelopeId}`);
   };
 
+  const renderSkeletons = () => {
+    return Array.from({ length: 6 }, (_, index) => (
+      <SkeletonCard key={index} />
+    ));
+  };
+
   return (
-    <div>
+    <div className="envelopes-container">
       <h2>Categories</h2>
       <div className="flex-container">
-        {error ? (
-          <p>Error: {error}</p>
+        {isLoading ? (
+          renderSkeletons()
+        ) : error ? (
+          <div className="error-container">
+            <p className="error-message">Error: {error}</p>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </div>
         ) : envelopes.length > 0 ? (
           envelopes.slice(0, showAll ? envelopes.length : 6).map(envelope => (
             <Card 
@@ -58,13 +74,18 @@ const Envelopes = ({ onSelectEnvelope }) => {
             />
           ))
         ) : (
-          <p>No envelopes found.</p>
+          <div className="empty-state">
+            <p>No categories found.</p>
+            <Button onClick={handleAddEnvelope}>Create Your First Category</Button>
+          </div>
         )}
       </div>
-      {!showAll && envelopes.length > 6 && (
+      {!isLoading && !error && envelopes.length > 6 && !showAll && (
         <Button onClick={handleShowAll}>Show All</Button>
       )}
-      <Button onClick={handleAddEnvelope}>Add New Category</Button>
+      {!isLoading && !error && envelopes.length > 0 && (
+        <Button onClick={handleAddEnvelope}>Add New Category</Button>
+      )}
     </div>
   );
 };
