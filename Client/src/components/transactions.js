@@ -6,12 +6,18 @@ const Transactions = ({envelopeId}) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!envelopeId) return;
+    if (!envelopeId) {
+      setIsLoading(false);
+      return;
+    }
 
     const fetchTransactions = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes/${envelopeId}/transactions`, {
           method: 'GET'
@@ -19,17 +25,19 @@ const Transactions = ({envelopeId}) => {
         if (response.status === 404) {
           setNotFound(true);
           setTransactions([]);
-          return;
+          return; 
         }
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setTransactions(data);
+        setTransactions(data || []);
         setNotFound(false);
       } catch (error) {
         setError(error.message);
-        console.error('There was an error fetching the data!', error);
+      } finally {
+        // This was completely missing - this is the key fix!
+        setIsLoading(false);
       }
     };
 
@@ -37,6 +45,7 @@ const Transactions = ({envelopeId}) => {
   }, [envelopeId]);
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'Invalid Date';
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
   };
@@ -46,6 +55,10 @@ const Transactions = ({envelopeId}) => {
   }
 
   const handleDelete = async (transactionId) => {
+    if (!window.confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/envelopes/${envelopeId}/transactions/${transactionId}`, {
         method: 'DELETE'
@@ -53,22 +66,33 @@ const Transactions = ({envelopeId}) => {
       if (!response.ok) {
         throw new Error('Make sure there are no transactions in this category before deleting');
       }
+
+      // Update local state instead of navigating away
+      setTransactions(transactions.filter(t => t.id !== transactionId));
       alert('Transaction deleted successfully!');
-      navigate('/'); // Redirect to the home page or another page after deletion
     } catch (error) {
       setError(error.message);
-      console.error('There was an error deleting the category!', error);
+      console.error('There was an error deleting the transaction!', error);
     }
-  };   
+  };
+
+  if (isLoading) {
+    return (
+      <div>
+        <h2>Transactions</h2>
+        <p>Loading transactions...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h2>Transactions</h2>
       <div>
         {error ? (
-          <p>Error: {error}</p>
+          <p className="error-message">Error: {error}</p>
         ) : transactions.length > 0 ? (
-          <table className = "transactions-table">
+          <table className="transactions-table">
             <thead>
               <tr>
                 <th>Date</th>

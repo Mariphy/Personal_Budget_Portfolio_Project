@@ -96,30 +96,65 @@
   margin: 20px auto;
   text-align: center;
   border-collapse: collapse;
+  background-color: #23262d;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #35383f;
+  width: 100%;
+  max-width: 800px;
 }
 
-.transactions-table th, 
-.transactions-table td {
-  padding: 10px;
+.transactions-table th {
+  background: linear-gradient(135deg, #2a2d35, #23262d);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 1rem;
   text-align: left;
-  border: 1px solid #ddd;
+  border-bottom: 2px solid #35383f;
+}
+
+.transactions-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #35383f;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.transactions-table tr:hover {
+  background-color: #2a2d35;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: none;
 }
 
 .custom-button {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 24px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
+  font-weight: 500;
   margin-right: 10px; 
   margin-bottom: 10px;
   margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .custom-button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.custom-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
 }
 
 .flex-container {
@@ -132,25 +167,51 @@
 }
 
 .flex-item {
-  background-color: #23262d; 
-  border-radius: 7px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  padding: 1rem;
-  transition: transform 0.2s;
-  flex: 1 1 calc(25% - 1rem); /* Adjust the width of the cards */
-  max-width: calc(25% - 1rem); /* Ensure cards fit within the container */
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #2a2d35 0%, #23262d 100%);
+  border: 1px solid #35383f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 calc(25% - 1rem);
+  max-width: calc(25% - 1rem);
+}
+
+.flex-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.flex-item:hover::before {
+  transform: scaleX(1);
 }
 
 .flex-item:hover {
-  transform: translateY(-5px); /* Lift effect on hover */
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 123, 255, 0.2);
+  border-color: #007bff;
 }
 
 .flex-item h3 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
 
 .flex-item p {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
   margin: 0;
 }
 
@@ -177,20 +238,23 @@
 
 .new-envelope-form,
 .update-envelope-form {
-  background-color: #282c34;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #2a2d35 0%, #23262d 100%);
+  padding: 2rem;
+  border-radius: 12px;
   max-width: 400px;
   margin: 20px auto;
   color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid #35383f;
 }
 
 .new-envelope-form h2,
 .update-envelope-form h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
   text-align: center;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .new-envelope-form form div,
@@ -201,64 +265,85 @@
 .new-envelope-form label,
 .update-envelope-form label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: lighter;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #ffffff;
 }
 
 .new-envelope-form input,
 .update-envelope-form input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: 2px solid #35383f;
+  border-radius: 8px;
   box-sizing: border-box;
+  background-color: #1a1d23;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
 .new-envelope-form input:focus,
 .update-envelope-form input:focus {
-  border-color: #61dafb;
+  border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  background-color: #23262d;
 }
 
 .new-envelope-form p,
 .update-envelope-form p {
-  color: #ff4d4d;
-  font-weight: normal;
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: 500;
+  text-align: center;
 }
 
 .new-envelope-form button,
 .update-envelope-form button {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 500;
   width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .new-envelope-form button:hover,
 .update-envelope-form button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
 }
 
 .new-transaction-form, 
 .update-transaction-form {
-  background-color: #282c34;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #2a2d35 0%, #23262d 100%);
+  padding: 2rem;
+  border-radius: 12px;
   max-width: 400px;
   margin: 20px auto;
   color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid #35383f;
 }
 
 .new-transaction-form h2, 
 .update-transaction-form h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
   text-align: center;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .new-transaction-form form div, 
@@ -269,46 +354,64 @@
 .new-transaction-form label, 
 .update-transaction-form label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: lighter;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #ffffff;
 }
 
 .new-transaction-form input, 
 .update-transaction-form input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: 2px solid #35383f;
+  border-radius: 8px;
   box-sizing: border-box;
+  background-color: #1a1d23;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
 .new-transaction-form input:focus, 
 .update-transaction-form input:focus {
-  border-color: #61dafb;
+  border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  background-color: #23262d;
 }
 
 .new-transaction-form p, 
 .update-transaction-form p {
-  color: #ff4d4d;
-  font-weight: normal;
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: 500;
+  text-align: center;
 }
 
 .new-transaction-form button, 
 .update-transaction-form button {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 500;
   width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 .new-transaction-form button:hover, 
 .update-transaction-form button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
 }
 
 .envelope-details {
@@ -348,4 +451,268 @@
 .edit-button,
 .delete-button {
   cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin: 0 0.25rem;
+}
+
+.edit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* Loading States */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.loading-spinner.small {
+  padding: 1rem;
+}
+
+.loading-spinner.large {
+  padding: 4rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #23262d;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.small .spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.loading-spinner.large .spinner {
+  width: 60px;
+  height: 60px;
+  border-width: 6px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Skeleton Loading */
+.skeleton-card {
+  background: linear-gradient(135deg, #2a2d35 0%, #23262d 100%);
+  border: 1px solid #35383f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 calc(25% - 1rem);
+  max-width: calc(25% - 1rem);
+}
+
+.skeleton-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #2a2d35 25%, #35383f 50%, #2a2d35 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-amount {
+  height: 20px;
+  width: 50%;
+}
+
+.skeleton-budget {
+  height: 32px;
+  width: 200px;
+  margin: 0 auto;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Error States */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Form Loading States */
+.form-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.form-container {
+  position: relative;
+}
+
+.form-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+/* Button Loading State */
+.custom-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.custom-button.loading {
+  position: relative;
+}
+
+.custom-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced Budget Styling */
+.budget-container {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.budget-title {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.budget-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+/* Improved Container Styles */
+.envelopes-container {
+  padding: 1rem;
+}
+
+/* Enhanced responsive design for skeleton cards */
+@media (max-width: 1024px) {
+  .skeleton-card {
+    flex: 1 1 calc(33.33% - 1rem);
+    max-width: calc(33.33% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-card {
+    flex: 1 1 calc(50% - 1rem);
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .skeleton-card {
+    flex: 1 1 calc(100% - 1rem);
+    max-width: calc(100% - 1rem);
+  }
 }

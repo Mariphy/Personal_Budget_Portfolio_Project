@@ -8,7 +8,6 @@ const EnvelopeDetails = () => {
   const { envelopeId } = useParams();
   const [envelope, setEnvelope] = useState(null);
   const [error, setError] = useState(null);
-  const [hasTransactions, setHasTransactions] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +21,6 @@ const EnvelopeDetails = () => {
         }
         const data = await response.json();
         setEnvelope(data[0]);
-        setHasTransactions(data[0].transactions && data[0].transactions.length > 0);
       } catch (error) {
         setError(error.message);
         console.error('There was an error fetching the data!', error);
@@ -65,11 +63,7 @@ const EnvelopeDetails = () => {
           <div className='frame-content'>
             <h2>{envelope.name}</h2>
             <p>{envelope.amount}</p>
-            {hasTransactions? 
-              (<Transactions envelopeId={envelopeId} />) : (
-                <p>No transactions available for this category.</p>
-              )
-            }
+            <Transactions envelopeId={envelopeId} />
             <Button onClick={handleAddTransaction}>Add Transaction</Button>
           </div>
           <div>
