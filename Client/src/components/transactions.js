@@ -108,8 +108,16 @@ const Transactions = ({envelopeId}) => {
                   <td>{formatDate(transaction.date)}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.recipient}</td>
-                  <td className='edit-button' onClick={()=> handleEdit(transaction.id)}>Edit</td>
-                  <td className='delete-button' onClick={()=>handleDelete(transaction.id)}>Delete</td>
+                  <td className="action-cell">
+                    <button className='edit-button' onClick={() => handleEdit(transaction.id)}>
+                      Edit
+                    </button>
+                  </td>
+                  <td className="action-cell">
+                    <button className='delete-button' onClick={() => handleDelete(transaction.id)}>
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

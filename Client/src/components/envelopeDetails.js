@@ -47,7 +47,7 @@ const EnvelopeDetails = () => {
         throw new Error('Make sure there are no transactions in this category before deleting');
       }
       alert('Category deleted successfully!');
-      navigate('/'); // Redirect to the home page or another page after deletion
+      navigate('/');
     } catch (error) {
       setError(error.message);
       console.error('There was an error deleting the category!', error);
@@ -64,7 +64,13 @@ const EnvelopeDetails = () => {
             <h2>{envelope.name}</h2>
             <p>{envelope.amount}</p>
             <Transactions envelopeId={envelopeId} />
-            <Button onClick={handleAddTransaction}>Add Transaction</Button>
+            <button 
+              className="add-transaction-btn" 
+              onClick={handleAddTransaction}
+              title="Add Transaction"
+            >
+              +
+            </button>
           </div>
           <div>
             <Button onClick={handleUpdate}>Update Category</Button>
