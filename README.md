@@ -12,7 +12,7 @@ Front end is deployed on Vercel, you can check it out [here](https://personal-bu
 
 Please allow up to 50 sec to initial load as I am using a free database.
 
-Back end API is deployed on [Render](https://personal-budget-portfolio-project.onrender.com/).
+Back end API was deployed on Render, but is nor currently active. 
 
 ## Running the app
 
